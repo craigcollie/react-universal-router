@@ -35,9 +35,8 @@ export RoutingProvider from './RoutingProvider';
 export clientRender from './clientRender';
 
 //  Exported utils
-export isValidRoute from './utils/isValidRoute';
-export propExtractor from './utils/propExtractor';
-export propLinker from './utils/propLinker';
+export getInjectedProps from './utils/getInjectedProps';
+export propInjector from './utils/propInjector';
 export getRoute from './utils/getRoute';
 export resolveRoute from './utils/resolveRoute';
 export sanitizePathname from './utils/sanitizePathname';

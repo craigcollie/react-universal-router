@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import propExtractor from './utils/propExtractor';
+import propExtractor from './utils/getInjectedProps';
 
 function clientRender(RootComponent, elementId = 'root') {
   ReactDOM.render(

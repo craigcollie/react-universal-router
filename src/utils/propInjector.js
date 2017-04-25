@@ -1,17 +1,15 @@
 import { renderToString } from 'react-dom/server';
 
-const propLinker = (props, htmlComponent) => {
+const propInjector = (props, htmlComponent) => {
   const Root = htmlComponent;
   const dataProps = JSON.stringify(props);
 
-  const appRoot = `
+  return `
       <script id='app-props' type='application/json'>
         <![CDATA[${dataProps}]]>
       </script>
       <div>${renderToString(Root(props))}</div>
     `;
-
-  return appRoot;
 };
 
-export default propLinker;
+export default propInjector;

@@ -10,7 +10,7 @@
     "postinstall": "yarn build",
     "start": "yarn watch",
     "build": "babel src --out-dir dist",
-    "watch": "babel src --out-dir dist --watch"
+    "watch": "rm -rf ./dist && babel src --out-dir dist --watch"
   },
   "dependencies": {
     "lodash": "^4.17.4",

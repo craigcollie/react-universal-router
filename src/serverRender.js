@@ -1,4 +1,4 @@
-import { propLinker, getRoute, resolveRoute } from './Router';
+import { propInjector, getRoute, resolveRoute } from './Router';
 
 function createTinyServer(RootComponent, routes, template) {
   return function (req, res, next) {
@@ -20,7 +20,7 @@ function createTinyServer(RootComponent, routes, template) {
           location: { pathname: req.url }, data, meta };
 
         res.render(template, {
-          appRoot: propLinker(props, RootComponent),
+          appRoot: propInjector(props, RootComponent),
           title: meta.title,
           description: meta.description,
         });
