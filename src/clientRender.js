@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { propExtractor } from './Router';
+
+import propExtractor from './utils/propExtractor';
 
 function clientRender(Root, elementId = 'root') {
   ReactDOM.render(
