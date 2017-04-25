@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 
 import propExtractor from './utils/propExtractor';
 
-function clientRender(Root, elementId = 'root') {
+function clientRender(RootComponent, elementId = 'root') {
   ReactDOM.render(
-    <Root {...propExtractor('app-props')} />,
+    <RootComponent {...propExtractor('app-props')} />,
     document.getElementById(elementId)
   );
 }
