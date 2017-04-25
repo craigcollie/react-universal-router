@@ -1,3 +1,3 @@
-import clientRender from './src/clientRender';
+import clientRender from './src/createTinyApp';
 
 export default 'fpp';

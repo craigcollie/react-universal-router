@@ -32,16 +32,15 @@ export const Router = ({
 export Route from './Route';
 export Link from './Link';
 export RoutingProvider from './RoutingProvider';
-export clientRender from './clientRender';
 
 //  Exported utils
 export getInjectedProps from './utils/getInjectedProps';
 export propInjector from './utils/propInjector';
-export getRoute from './utils/getRoute';
+export matchRoute from './utils/matchRoute';
 export resolveRoute from './utils/resolveRoute';
 export sanitizePathname from './utils/sanitizePathname';
 
-//  Express middleware
-export createTinyServer from './serverRender';
+export createTinyApp from './createTinyApp';
+export createTinyServer from './createTinyServer';
 
 export default Router;

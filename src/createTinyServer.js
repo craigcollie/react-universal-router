@@ -1,8 +1,12 @@
-import { propInjector, getRoute, resolveRoute } from './Router';
+import propInjector from './utils/propInjector';
+import matchRoute from './utils/matchRoute';
+import resolveRoute from './utils/resolveRoute';
 
 function createTinyServer(RootComponent, routes, template) {
+
+  //  Express middleware
   return function (req, res, next) {
-    const activeRoute = getRoute(routes, req.url);
+    const activeRoute = matchRoute(routes, req.url);
     if (activeRoute.length) {
 
       //  Perform any route resolves here first

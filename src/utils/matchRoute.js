@@ -1,4 +1,3 @@
-import React, { Children } from 'react';
 import filter from 'lodash/filter';
 
 const isPathMatch = (item, sanitizedUrl) =>
@@ -6,10 +5,10 @@ const isPathMatch = (item, sanitizedUrl) =>
 
 //  Ensure the child components we're matching
 //  are 'Route' and the path matches
-const getRoute = (routes, url) => {
+const matchRoute = (routes, url) => {
   return filter(routes().props.children, item =>
     (isPathMatch(item, url))
   );
 };
 
-export default getRoute;
+export default matchRoute;

@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom';
 
 import propExtractor from './utils/getInjectedProps';
 
-function clientRender(RootComponent, elementId = 'root') {
+function createTinyApp(RootComponent, elementId = 'root') {
   ReactDOM.render(
     <RootComponent {...propExtractor('app-props')} />,
     document.getElementById(elementId)
   );
 }
 
-export default clientRender;
+export default createTinyApp;
