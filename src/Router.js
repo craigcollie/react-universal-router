@@ -43,6 +43,6 @@ export resolveRoute from './utils/resolveRoute';
 export sanitizePathname from './utils/sanitizePathname';
 
 //  Express middleware
-export createRouterMiddleware from './routerMiddleware';
+export createTinyServer from './serverRender';
 
 export default Router;

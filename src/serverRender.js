@@ -1,7 +1,7 @@
 import { propLinker, getRoute, resolveRoute } from './Router';
 
-function createRouterMiddleware(RootComponent, routes) {
-  return function (req, res) {
+function createTinyServer(RootComponent, routes) {
+  return function (req, res, next) {
     const activeRoute = getRoute(routes, req.url);
     if (activeRoute.length) {
 
@@ -26,9 +26,9 @@ function createRouterMiddleware(RootComponent, routes) {
       });
 
     } else {
-      res.send('404: Route not provided');
+      next();
     }
   }
 }
 
-export default createRouterMiddleware;
+export default createTinyServer;
