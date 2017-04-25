@@ -5,3 +5,6 @@ yarn.lock
 # Logs
 npm-debug.log
 yarn-error.log
+
+# Generated files
+dist

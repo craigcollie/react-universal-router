@@ -7,6 +7,7 @@
   "author": "Craig Collie <craig.collie@rea-group.com>",
   "license": "MIT",
   "scripts": {
+    "postinstall": "yarn build",
     "build": "babel src --out-dir dist --watch"
   },
   "dependencies": {
