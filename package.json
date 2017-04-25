@@ -1,0 +1,9 @@
+{
+  "name": "react-universal-router",
+  "version": "0.0.1",
+  "description": "A universal router for isomorphic React applications",
+  "main": "index.js",
+  "repository": "git@github.com:craigcollie/react-universal-router.git",
+  "author": "Craig Collie <craig.collie@rea-group.com>",
+  "license": "MIT"
+}

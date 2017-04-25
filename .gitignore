@@ -1,2 +1,10 @@
-# Node
+# NPM and Yarn
 node_modules
+yarn.lock
+
+# Logs
+npm-debug.log
+yarn-error.log
+
+# Generated files
+dist
