@@ -1,6 +1,16 @@
 # Tiny universal
 A universal router for React.
 
+### Requirements
+* React
+* Express (support for Koa on the way)
+
+### Getting started
+From inside your project, install package:
+```bash
+$ yarn add tiny-universal
+```
+
 ### Client (The index.js file)
 This file is used as the entry point for the React app. If using with
 Webpack, ensure you point to this file as your entry.
