@@ -41,7 +41,6 @@ import Routes from './routes/Routes';
 //  will be provided here along with location data
 const Root = (serverProps) => (
   <RoutingProvider {...serverProps} routes={Routes}>
-    <Header />
     <Router />
   </RoutingProvider>
 );
