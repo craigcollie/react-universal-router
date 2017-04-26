@@ -1,13 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { Component } from 'react';
 
-import getInjectedProps from './utils/getInjectedProps';
+const getInjectedProps = (propContainer) => {
+  let props = document.getElementById(propContainer).textContent;
+  props = props.replace("<![CDATA[", "").replace("]]>", "");
+  return JSON.parse(props);
+};
 
-function createTinyApp(RootComponent, elementId = 'root') {
-  ReactDOM.render(
-    <RootComponent {...getInjectedProps('app-props')} />,
-    document.getElementById(elementId)
-  );
-}
+const createTinyApp = (RootComponent) => (
+  <RootComponent {...getInjectedProps('app-props')} />
+);
 
 export default createTinyApp;

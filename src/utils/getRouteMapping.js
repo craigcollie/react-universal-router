@@ -1,12 +1,16 @@
 import reduce from 'lodash/reduce';
 
+/*
+ * @name getRouteMapping
+ * @description Creates a map of all <Route /> components and their props.
+ */
 function getRouteMapping(routes) {
   return reduce(routes, (acc, route) => {
     const {
       path,
       resolve,
       routeParams,
-      cache = true,
+      cache = false,
       meta,
     } = route.props;
 
