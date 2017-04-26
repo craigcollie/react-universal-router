@@ -11,6 +11,39 @@ From inside your project, install package:
 $ yarn add tiny-universal
 ```
 
+### Included components
+#### RouterProvider
+The router provider is the outer most required component. Your outer most
+app component (the one provided to the server and the client) will have
+all server props passed to it, and these props must be applied
+to the `<RouterProvider />`.
+```js
+import { RouterProvider } from 'tiny-universal';
+<RouterProvider {...serverProps} routes={<Routes Component>} />
+```
+
+#### Router (may be removed)
+The Router component ensures all `<Route />` components have server data
+available at the time of render.
+```js
+<Router />
+```
+
+#### Route
+This component allows you to define routes for your application. The `path` attribute
+is required, and will be matched on both the server-side and client-side.
+```js
+<Route
+  path={<string>}
+  component={<component>}
+  resolve={<fn|promise>}
+  routeParams={<object>}
+  meta={<object>}
+/>
+```
+WIP: More docs to follow!
+
+
 ### Client (The index.js file)
 This file is used as the entry point for the React app. If using with
 Webpack, ensure you point to this file as your entry.
@@ -22,7 +55,7 @@ import App from './App';
 
 //  Render the same App component
 //  on the client side
-createTinyApp(App, 'root');
+createTinyApp(App);
 ```
 
 ### App

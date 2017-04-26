@@ -74,18 +74,12 @@ class RoutingProvider extends Component {
 
   registerRouteChange(pathname, isHistoryEvent) {
     const { routeMapping } = this.state;
-    const {
-      resolve,
-      routeParams,
-      cache,
-      data,
-      meta,
-    } = routeMapping[pathname];
+    const { resolve, routeParams, cache, data, meta } = routeMapping[pathname];
 
     if (meta) {
-      document.title = meta.title;
-      document.querySelector('meta[name="description"]')
-              .setAttribute("content", meta.description);
+      const { title, description } = meta;
+      document.title = title;
+      document.querySelector('meta[name="description"]').setAttribute("content", description);
     }
 
     //  Update push state
