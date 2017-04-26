@@ -43,6 +43,12 @@ is required, and will be matched on both the server-side and client-side.
 ```
 WIP: More docs to follow!
 
+#### Link
+A text link component to update the route client-side.
+```js
+<Link to="/foo" text="Go to foo" />
+```
+
 
 ### Client (The index.js file)
 This file is used as the entry point for the React app. If using with
