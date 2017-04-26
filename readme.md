@@ -52,16 +52,18 @@ A text link component to update the route client-side.
 
 ### Client (The index.js file)
 This file is used as the entry point for the React app. If using with
-Webpack, ensure you point to this file as your entry.
+Webpack, ensure you point to this file as your entry. The `createTinyApp` function
+will wrap your root application component and inject any server-side props.
 ```js
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { createTinyApp } from 'tiny-universal';
 
 import App from './App';
 
 //  Render the same App component
 //  on the client side
-createTinyApp(App);
+createTinyApp(createTinyApp(App), document.getElementById('root'));
 ```
 
 ### App
