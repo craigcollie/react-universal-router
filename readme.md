@@ -39,13 +39,13 @@ import Routes from './routes/Routes';
 //  Root router component
 //  Data from the original isomorphic fetch
 //  will be provided here along with location data
-const Root = (serverProps) => (
+const App = (serverProps) => (
   <RoutingProvider {...serverProps} routes={Routes}>
     <Router />
   </RoutingProvider>
 );
 
-export default Root;
+export default App;
 ```
 
 ### Routes
