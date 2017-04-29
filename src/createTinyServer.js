@@ -41,7 +41,7 @@ function createTinyServer(RootComponent, routes, template) {
             search,
           },
           resolvedData,
-          meta
+          meta,
         };
 
         res.render(template, {

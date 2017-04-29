@@ -6,11 +6,11 @@ const getRouteMap = ({
   routeParams,
   cache = false,
   meta,
-}, { pathname }, resolvedData) => ({
+}, location, resolvedData) => ({
   location,
   resolve,
   routeParams,
-  resolvedData: (path === pathname) ? resolvedData : null,
+  resolvedData: (path === location.pathname) ? resolvedData : null,
   cache,
   meta,
 });

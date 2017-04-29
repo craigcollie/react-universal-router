@@ -18,8 +18,6 @@ class RoutingProvider extends Component {
     const definedRoutes = routes().props.children;
     const routeMapping = createRouteMapping(definedRoutes, location, resolvedData);
 
-    //  Create our route state object from
-    //  connected Route components
     this.state = {
       location,
       routes: definedRoutes,
@@ -61,8 +59,6 @@ class RoutingProvider extends Component {
     };
   }
 
-  //  Maps the current pathname to data
-  //  -> Set on init from isomorphic
   updateRouteMap(location, resolvedData) {
     const { routeMapping } = this.state;
     this.setState(syncRouteMap(location, routeMapping, resolvedData));
@@ -85,7 +81,7 @@ class RoutingProvider extends Component {
   render() {
     return (
       <div>{this.props.children}</div>
-    )
+    );
   }
 }
 

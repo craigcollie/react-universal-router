@@ -21,8 +21,6 @@ class Router extends Component {
       const { path, component: ComponentView } = route.props;
       const { resolvedData } = getRouteMap(path);
 
-      //  Pass location and resolvedData props
-      //  to the active route
       return (
         <ComponentView
           location={location}
