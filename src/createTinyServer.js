@@ -1,3 +1,4 @@
+import url from 'url';
 import propInjector from './utils/propInjector';
 import matchRoute from './utils/matchRoute';
 import resolveRoute from './utils/resolveRoute';
@@ -6,7 +7,9 @@ function createTinyServer(RootComponent, routes, template) {
 
   //  Express middleware
   return function (req, res, next) {
-    const activeRoute = matchRoute(routes, req.url);
+    const { pathname, search } = url.parse(req.url);
+
+    const activeRoute = matchRoute(routes, pathname);
     if (activeRoute.length) {
 
       //  Perform any route resolves here first
@@ -22,7 +25,8 @@ function createTinyServer(RootComponent, routes, template) {
       resolveRoute(resolve, routeParams).then(resolvedData => {
         const props = {
           location: {
-            pathname: req.url
+            pathname,
+            search,
           },
           resolvedData,
           meta

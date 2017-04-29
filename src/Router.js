@@ -1,28 +1,35 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Route from './Route';
-
+/* @name Router
+ * @description Replaces the <Route /> with the required component
+ and injects resolved props and location from the routing context
+ */
 class Router extends Component {
   render() {
-    const { location, routes, getRouteMap } = this.context;
+    const {
+      location,
+      routes,
+      getRouteMap
+    } = this.context;
 
     const activeRoute = routes
       .filter(route => (location.pathname === route.props.path))
       .map(route => {
-        const { path } = route.props;
+        const { path, component: ComponentView } = route.props;
         const { resolvedData } = getRouteMap(path);
+
         const routeProps = {
-          ...route.props,
-          resolvedData
+          location,
+          resolvedData,
         };
 
         return (
-          <Route {...routeProps} />
+          <ComponentView {...routeProps} />
         );
       })[0];
 
-    return (<div>{activeRoute}</div>);
+    return activeRoute;
   }
 }
 

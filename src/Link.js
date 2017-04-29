@@ -9,11 +9,11 @@ class Link extends Component {
 
   handleClick(event) {
     const { to: pathname } = this.props;
-    const { registerRouteChange } = this.context;
+    const { onRouteChange } = this.context;
     event.preventDefault();
 
     //  Update the router
-    registerRouteChange(pathname);
+    onRouteChange(pathname);
   }
 
   render() {
@@ -30,7 +30,7 @@ Link.propTypes = {
 };
 
 Link.contextTypes = {
-  registerRouteChange: PropTypes.func,
+  onRouteChange: PropTypes.func,
 };
 
 export default Link;

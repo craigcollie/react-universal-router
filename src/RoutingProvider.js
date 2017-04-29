@@ -1,3 +1,4 @@
+import url from 'url';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -9,7 +10,6 @@ class RoutingProvider extends Component {
     super(props);
 
     const { location, resolvedData, routes } = props;
-    const { pathname } = location;
 
     const definedRoutes = routes().props.children;
     const routeMapping = getRouteMapping(definedRoutes, location, resolvedData);
@@ -17,20 +17,20 @@ class RoutingProvider extends Component {
     //  Create our route state object from
     //  connected Route components
     this.state = {
-      location: { pathname },
+      location,
       routes: definedRoutes,
       routeMapping,
     };
 
     this.updateRouteMap = this.updateRouteMap.bind(this);
-    this.registerRouteChange = this.registerRouteChange.bind(this);
+    this.onRouteChange = this.onRouteChange.bind(this);
   }
 
   getChildContext() {
     const { routes, location, routeMapping } = this.state;
     return {
       updateRouteMap: this.updateRouteMap,
-      registerRouteChange: this.registerRouteChange,
+      onRouteChange: this.onRouteChange,
       getRouteMap: (path) => (routeMapping[path]),
       routes,
       location,
@@ -42,7 +42,7 @@ class RoutingProvider extends Component {
 
     //  Update initial mounting location with data
     //  from isomorphic resolve
-    this.updateRouteMap(location.pathname, data);
+    this.updateRouteMap(location, data);
 
     //  Add the event listener for popstate
     //  check for window.onpopstate and
@@ -54,8 +54,9 @@ class RoutingProvider extends Component {
 
   //  Maps the current pathname to data
   //  -> Set on init from isomorphic
-  updateRouteMap(pathname, resolvedData) {
+  updateRouteMap(location, resolvedData) {
     const { routeMapping } = this.state;
+    const { pathname } = location;
 
     this.setState({
       routeMapping: Object.assign({}, routeMapping, {
@@ -66,13 +67,12 @@ class RoutingProvider extends Component {
             : routeMapping[pathname].resolvedData
         }
       }),
-      location: {
-        pathname,
-      }
+      location
     });
   }
 
-  registerRouteChange(pathname, isHistoryEvent) {
+  onRouteChange(locationString, isHistoryEvent) {
+    const { pathname, search } = url.parse(locationString);
     const { routeMapping } = this.state;
     const { resolve, routeParams, cache, data, meta } = routeMapping[pathname];
 
@@ -84,7 +84,7 @@ class RoutingProvider extends Component {
 
     //  Update push state
     if (!isHistoryEvent) {
-      history.pushState({page: pathname}, meta.title, pathname);
+      history.pushState({ page: locationString }, meta.title, locationString);
     }
 
     //  If caching is on, then we should only
@@ -92,12 +92,10 @@ class RoutingProvider extends Component {
     const shouldFetchData = (cache && !data) || (!cache);
 
     if (!shouldFetchData) {
-      //  Update the routeMap only
-      this.updateRouteMap(pathname, null);
+      this.updateRouteMap({ pathname, search }, null);
     } else {
-      //  Get data and update the route map
       resolveRoute(resolve, routeParams)
-        .then(data => this.updateRouteMap(pathname, data));
+        .then(data => this.updateRouteMap({ pathname, search }, data));
     }
   }
 
@@ -110,7 +108,7 @@ class RoutingProvider extends Component {
 
 RoutingProvider.childContextTypes = {
   updateRouteMap: PropTypes.func,
-  registerRouteChange: PropTypes.func,
+  onRouteChange: PropTypes.func,
   routes: PropTypes.array,
   location: PropTypes.object,
   getRouteMap: PropTypes.func,
