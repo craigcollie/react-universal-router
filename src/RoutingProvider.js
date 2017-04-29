@@ -48,7 +48,9 @@ class RoutingProvider extends Component {
     //  check for window.onpopstate and
     //  history and fallback if not available
     window.onpopstate = () => {
-      this.registerRouteChange(window.location.pathname, true);
+      const { pathname, search } = window.location;
+      const locationString = `${pathname}${search}`;
+      this.onRouteChange(locationString, true);
     };
   }
 
