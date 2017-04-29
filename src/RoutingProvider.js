@@ -1,8 +1,12 @@
 import url from 'url';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import forEach from 'lodash/forEach';
 
-import resolveRoute from './utils/resolveRoute';
+import metaPlugin from './plugins/metaPlugin';
+import historyPlugin from './plugins/historyPlugin';
+import resolveRoutePlugin from './plugins/resolveRoutePlugin';
+
 import getRouteMapping from './utils/getRouteMapping';
 
 class RoutingProvider extends Component {
@@ -13,6 +17,13 @@ class RoutingProvider extends Component {
 
     const definedRoutes = routes().props.children;
     const routeMapping = getRouteMapping(definedRoutes, location, resolvedData);
+
+    //  Default requirements, can be overridden
+    this.plugins = {
+      metaPlugin,
+      historyPlugin,
+      resolveRoutePlugin,
+    };
 
     //  Create our route state object from
     //  connected Route components
@@ -74,31 +85,12 @@ class RoutingProvider extends Component {
   }
 
   onRouteChange(locationString, isHistoryEvent) {
-    const { pathname, search } = url.parse(locationString);
+    const { pathname } = url.parse(locationString);
     const { routeMapping } = this.state;
-    const { resolve, routeParams, cache, data, meta } = routeMapping[pathname];
 
-    if (meta) {
-      const { title, description } = meta;
-      document.title = title;
-      document.querySelector('meta[name="description"]').setAttribute("content", description);
-    }
-
-    //  Update push state
-    if (!isHistoryEvent) {
-      history.pushState({ page: locationString }, meta.title, locationString);
-    }
-
-    //  If caching is on, then we should only
-    //  resolve the route data once
-    const shouldFetchData = (cache && !data) || (!cache);
-
-    if (!shouldFetchData) {
-      this.updateRouteMap({ pathname, search }, null);
-    } else {
-      resolveRoute(resolve, routeParams)
-        .then(data => this.updateRouteMap({ pathname, search }, data));
-    }
+    forEach(this.plugins, (plugin, key) => {
+      plugin.apply(this, [ locationString, routeMapping[pathname], isHistoryEvent ]);
+    });
   }
 
   render() {

@@ -7,6 +7,7 @@ function getRouteMapping(routes, location, resolvedData) {
     const { path, resolve, routeParams, cache = false, meta } = route.props;
 
     acc[path] = {
+      location,
       resolve,
       routeParams,
       resolvedData: (path === location.pathname) ? resolvedData : null,
