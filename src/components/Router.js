@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import isArray from 'lodash/isArray';
 import PropTypes from 'prop-types';
 
 /* @name Router
@@ -14,22 +15,33 @@ class Router extends Component {
     } = this.context;
 
     const location = getLocation();
+    const routes = getRoutes();
 
-    return getRoutes()
-      .filter(route => (location.pathname === route.props.path))
-      .map(route => {
-        const { path, component: ComponentView } = route.props;
-        const { resolvedData } = getRouteMap(path);
+    const mapVisibleRoute = (route) => {
+      const { path, component: ComponentView } = route.props;
+      const { resolvedData } = getRouteMap(path);
 
-        //  Pass location and resolvedData props
-        //  to the active route
-        return (
-          <ComponentView
-            location={location}
-            resolvedData={resolvedData}
-          />
-        );
-      })[0];
+      //  Pass location and resolvedData props
+      //  to the active route
+      return (
+        <ComponentView
+          location={location}
+          resolvedData={resolvedData}
+        />
+      );
+    };
+
+    if (isArray(routes)) {
+      return getRoutes()
+        .filter(route => (location.pathname === route.props.path))
+        .map(mapVisibleRoute)[0];
+    }
+
+    if (routes.props.path !== location.pathname) {
+      return (<div>Route not found</div>);
+    }
+
+    return mapVisibleRoute(routes);
   }
 }
 

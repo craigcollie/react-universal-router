@@ -15,7 +15,6 @@ class RoutingProvider extends Component {
     super(props);
 
     const { location, resolvedData, routes } = props;
-
     const definedRoutes = routes().props.children;
     const routeMapping = createRouteMapping(definedRoutes, location, resolvedData);
 
@@ -72,9 +71,14 @@ class RoutingProvider extends Component {
   onRouteChange(newLocation, isHistoryEvent) {
     const { pathname } = url.parse(newLocation);
     const { routeMapping } = this.state;
+    const route = routeMapping[pathname];
+
+    if (!route) {
+      throw new Error(`${pathname} is not a valid route`);
+    }
 
     forEach(this.plugins, plugin =>
-      plugin.apply(this, [ newLocation, routeMapping[pathname], isHistoryEvent ])
+      plugin.apply(this, [ newLocation, route, isHistoryEvent ])
     );
   }
 

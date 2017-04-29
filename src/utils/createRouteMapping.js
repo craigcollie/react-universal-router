@@ -1,22 +1,40 @@
+import isArray from 'lodash/isArray';
+
+const getRouteMap = ({
+  path,
+  resolve,
+  routeParams,
+  cache = false,
+  meta,
+}, { pathname }, resolvedData) => ({
+  location,
+  resolve,
+  routeParams,
+  resolvedData: (path === pathname) ? resolvedData : null,
+  cache,
+  meta,
+});
+
 /*
  * @name getRouteMapping
  * @description Creates a map of all <Route /> components and their props.
  */
 function getRouteMapping(routes, location, resolvedData) {
-  return routes.reduce((acc, route) => {
-    const { path, resolve, routeParams, cache = false, meta } = route.props;
 
-    acc[path] = {
-      location,
-      resolve,
-      routeParams,
-      resolvedData: (path === location.pathname) ? resolvedData : null,
-      cache,
-      meta,
-    };
+  //  Reduce all routes props to a single object
+  if (isArray(routes)) {
+    return routes.reduce((acc, route) => {
+      const { path } = route.props;
+      acc[path] = getRouteMap(route.props, location, resolvedData);
+      return acc;
+    }, {});
+  }
 
-    return acc;
-  }, {});
+  //  Routes is singular
+  const { path } = routes.props;
+  return {
+    [path]: getRouteMap(routes.props, location, resolvedData),
+  };
 }
 
 export default getRouteMapping;
