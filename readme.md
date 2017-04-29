@@ -10,6 +10,7 @@ From inside your project, install package:
 ```bash
 $ yarn add tiny-universal
 ```
+Feel free to clone the [tiny-universal-seed](https://github.com/craigcollie/tiny-universal-seed) repository to see it in action, without having to configure anything.
 
 ### Included components
 #### RouterProvider
