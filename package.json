@@ -2,26 +2,26 @@
   "name": "tiny-universal",
   "version": "0.0.9",
   "description": "A universal router for isomorphic React applications",
-  "main": "dist/Router.js",
+  "main": "dist/index.js",
   "repository": "git@github.com:craigcollie/react-universal-router.git",
   "author": "Craig Collie <craig.collie@rea-group.com>",
   "license": "MIT",
   "scripts": {
-    "postinstall": "yarn build",
     "start": "yarn watch",
-    "build": "babel src --out-dir dist",
-    "watch": "rm -rf ./dist && babel src --out-dir dist --watch"
+    "postinstall": "yarn bundle",
+    "bundle": "babel src --out-dir dist",
+    "watch": "babel src --out-dir dist --watch"
   },
   "dependencies": {
-    "lodash": "^4.17.4",
     "prop-types": "^15.5.8",
     "react": "^15.5.4",
-    "babel": "^6.23.0",
-    "babel-cli": "^6.24.1"
+    "react-dom": "15.4.2"
   },
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-cli": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1"

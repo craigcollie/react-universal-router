@@ -1,4 +1,4 @@
-import React, { Children, Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import resolveRoute from './utils/resolveRoute';
@@ -8,12 +8,11 @@ class RoutingProvider extends Component {
   constructor(props) {
     super(props);
 
-    const { location, data, routes } = props;
+    const { location, resolvedData, routes } = props;
     const { pathname } = location;
 
-    //  Get route components (TODO check for Route)
     const definedRoutes = routes().props.children;
-    const routeMapping = getRouteMapping(definedRoutes);
+    const routeMapping = getRouteMapping(definedRoutes, location, resolvedData);
 
     //  Create our route state object from
     //  connected Route components
@@ -23,17 +22,18 @@ class RoutingProvider extends Component {
       routeMapping,
     };
 
-    //  Hydrate the current route data
-    this.state.routeMapping[pathname].data = data;
-
     this.updateRouteMap = this.updateRouteMap.bind(this);
     this.registerRouteChange = this.registerRouteChange.bind(this);
   }
 
   getChildContext() {
+    const { routes, location, routeMapping } = this.state;
     return {
       updateRouteMap: this.updateRouteMap,
       registerRouteChange: this.registerRouteChange,
+      getRouteMap: (path) => (routeMapping[path]),
+      routes,
+      location,
     }
   }
 
@@ -54,16 +54,16 @@ class RoutingProvider extends Component {
 
   //  Maps the current pathname to data
   //  -> Set on init from isomorphic
-  updateRouteMap(pathname, data) {
+  updateRouteMap(pathname, resolvedData) {
     const { routeMapping } = this.state;
 
     this.setState({
       routeMapping: Object.assign({}, routeMapping, {
         [pathname]: {
           ...routeMapping[pathname],
-          data: data
-            ? data
-            : routeMapping[pathname].data
+          resolvedData: resolvedData
+            ? resolvedData
+            : routeMapping[pathname].resolvedData
         }
       }),
       location: {
@@ -102,21 +102,8 @@ class RoutingProvider extends Component {
   }
 
   render() {
-    //  Location must come from state, and not isomorphic
-    //  because the router will change the current pathname
-    const { location, routes } = this.state;
-
-    //  Route data should be there for the
-    //  initial page load (server) and null for
-    //  other subsequent routes (fetch on client)
-    const { data } = this.state.routeMapping[location.pathname];
-
     return (
-      <div>
-        {Children.map(this.props.children, (child) => (
-          React.cloneElement(child, { data, location, routes })
-        ))}
-      </div>
+      <div>{this.props.children}</div>
     )
   }
 }
@@ -124,6 +111,9 @@ class RoutingProvider extends Component {
 RoutingProvider.childContextTypes = {
   updateRouteMap: PropTypes.func,
   registerRouteChange: PropTypes.func,
+  routes: PropTypes.array,
+  location: PropTypes.object,
+  getRouteMap: PropTypes.func,
 };
 
 export default RoutingProvider;

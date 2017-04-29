@@ -1,46 +1,35 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import { Route } from './Router';
+import Route from './Route';
 
-const isActive = (pathname, path) => (pathname === path);
+class Router extends Component {
+  render() {
+    const { location, routes, getRouteMap } = this.context;
 
-export const Router = ({
-  routes,
-  location,
-  data: resolvedData,
-}) => {
-  return (
-    <div>
-      {routes.map((route, i) => {
+    const activeRoute = routes
+      .filter(route => (location.pathname === route.props.path))
+      .map(route => {
         const { path } = route.props;
-
+        const { resolvedData } = getRouteMap(path);
         const routeProps = {
           ...route.props,
           resolvedData
         };
 
         return (
-          isActive(location.pathname, path) &&
-          <Route key={i} {...routeProps} />
+          <Route {...routeProps} />
         );
-      })}
-    </div>
-  )
+      })[0];
+
+    return (<div>{activeRoute}</div>);
+  }
+}
+
+Router.contextTypes = {
+  location: PropTypes.object,
+  routes: PropTypes.array,
+  getRouteMap: PropTypes.func,
 };
-
-//  Exported components
-export Route from './Route';
-export Link from './Link';
-export RoutingProvider from './RoutingProvider';
-
-//  Exported utils
-export getInjectedProps from './utils/getInjectedProps';
-export propInjector from './utils/propInjector';
-export matchRoute from './utils/matchRoute';
-export resolveRoute from './utils/resolveRoute';
-export sanitizePathname from './utils/sanitizePathname';
-
-export createTinyApp from './createTinyApp';
-export createTinyServer from './createTinyServer';
 
 export default Router;
