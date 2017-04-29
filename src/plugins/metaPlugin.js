@@ -1,11 +1,18 @@
-/* @name metaPlugin
- * @description Updates route meta data client-side
- */
-function metaPlugin(newLocation, { meta }, isHistoryEvent) {
-  if (meta) {
-    const { title, description } = meta;
+// @flow
+import type { Route } from './../types/Route';
+
+function metaPlugin(location: string, route: Route, isHistoryEvent: boolean) {
+  const { meta = { title: '', description: '' } } = route;
+  const { title, description } = meta;
+
+  const metaDescription = document.querySelector('meta[name="description"]') || null;
+
+  if (document.title) {
     document.title = title;
-    document.querySelector('meta[name="description"]').setAttribute("content", description);
+  }
+
+  if (metaDescription) {
+    metaDescription.setAttribute("content", description);
   }
 }
 

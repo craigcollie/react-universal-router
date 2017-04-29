@@ -1,10 +1,14 @@
-/* @name historyPlugin
- * @description Adds push state functionality for client-side history
- */
-function historyPlugin(newLocation, { meta }, isHistoryEvent) {
+// @flow
+import type { Route } from './../types/Route';
+
+function historyPlugin(location: string, route: Route, isHistoryEvent: boolean) {
+  const { meta } = route;
+
   if (!isHistoryEvent && meta) {
     const { title } = meta;
-    history.pushState({ page: newLocation }, title, newLocation);
+    const locationObject = { page: location };
+
+    history.pushState(locationObject, title, location);
   }
 }
 

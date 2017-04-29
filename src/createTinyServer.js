@@ -34,7 +34,7 @@ function createTinyServer(RootComponent, routes, template) {
 
       //  Resolve data first, then render the route
       //  and pass props to the client app
-      resolveRoute(resolve, routeParams).then(resolvedData => {
+      resolveRoute(currentRoute).then(resolvedData => {
         const props = {
           location: {
             pathname,
