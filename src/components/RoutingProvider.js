@@ -51,7 +51,6 @@ class RoutingProvider extends Component {
   }
 
   componentDidMount() {
-    //  Listen for browser history changes
     window.onpopstate = () => {
       const { pathname, search } = window.location;
       const locationString = `${pathname}${search}`;

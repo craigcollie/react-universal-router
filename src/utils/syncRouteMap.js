@@ -4,12 +4,13 @@
  */
 function syncRouteMap(location, routeMapping, resolvedData) {
   const { pathname } = location;
+  const { resolvedData: cachedData } = routeMapping[pathname];
 
   return {
     routeMapping: Object.assign({}, routeMapping, {
       [pathname]: {
         ...routeMapping[pathname],
-        resolvedData,
+        resolvedData: (resolvedData ? resolvedData : cachedData),
       }
     }),
     location

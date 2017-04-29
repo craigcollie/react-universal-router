@@ -17,14 +17,14 @@ const isRouteCached = ({ cache, resolvedData }) =>
 
 function resolveRoutePlugin(
   location: string,
-  route: Route, 
+  route: Route,
   isHistoryEvent: boolean
 ) {
   const locationObject = url.parse(location);
   const { pathname, search } = locationObject;
 
   if (!isRouteCached(route)) {
-    return this.updateRouteMap(locationObject, null);
+    return this.updateRouteMap(locationObject);
   }
 
   return resolveRoute(route)

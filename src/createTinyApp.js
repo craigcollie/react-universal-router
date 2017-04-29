@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+// @flow
+import React from 'react';
+import type { Component } from './types/ReactTypes';
 
 const getInjectedProps = (propContainer) => {
   let props = document.getElementById(propContainer).textContent;
@@ -6,8 +8,8 @@ const getInjectedProps = (propContainer) => {
   return JSON.parse(props);
 };
 
-const createTinyApp = (RootComponent) => (
-  <RootComponent {...getInjectedProps('app-props')} />
-);
+function createTinyApp (RootComponent: Component<any>) {
+  return (<RootComponent {...getInjectedProps('app-props')} />);
+};
 
 export default createTinyApp;
