@@ -15,7 +15,11 @@ export const resolveRoute = (route: Route) => {
 const isRouteCached = ({ cache, resolvedData }) =>
   ((cache && !resolvedData) || (!cache));
 
-function resolveRoutePlugin(location: string, route: Route, isHistoryEvent: boolean) {
+function resolveRoutePlugin(
+  location: string,
+  route: Route, 
+  isHistoryEvent: boolean
+) {
   const locationObject = url.parse(location);
   const { pathname, search } = locationObject;
 

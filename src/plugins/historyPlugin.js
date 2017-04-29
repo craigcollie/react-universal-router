@@ -1,7 +1,11 @@
 // @flow
 import type { Route } from './../types/Route';
 
-function historyPlugin(location: string, route: Route, isHistoryEvent: boolean) {
+function historyPlugin(
+  location: string,
+  route: Route,
+  isHistoryEvent: boolean
+) {
   const { meta } = route;
 
   if (!isHistoryEvent && meta) {
