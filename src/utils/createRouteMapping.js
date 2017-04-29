@@ -14,6 +14,7 @@ function getRouteMapping(routes, location, resolvedData) {
       cache,
       meta,
     };
+
     return acc;
   }, {});
 }

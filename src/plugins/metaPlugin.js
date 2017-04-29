@@ -1,4 +1,7 @@
-function update(newLocation, { meta }, isHistoryEvent) {
+/* @name metaPlugin
+ * @description Updates route meta data client-side
+ */
+function metaPlugin(newLocation, { meta }, isHistoryEvent) {
   if (meta) {
     const { title, description } = meta;
     document.title = title;
@@ -6,4 +9,4 @@ function update(newLocation, { meta }, isHistoryEvent) {
   }
 }
 
-export default update;
+export default metaPlugin;

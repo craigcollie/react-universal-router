@@ -1,7 +1,24 @@
 import url from 'url';
-import resolveRoute from './../utils/resolveRoute';
 
-function resolve(routeUrl, { cache, resolvedData, resolve, routeParams }, isHistoryEvent) {
+/* @name resolveRoute
+ * @description Tries to resolve data for the route
+ */
+export const resolveRoute = (routeResolve, routeParams = {}) => {
+  return new Promise((resolve) => {
+    if (typeof routeResolve === 'function') {
+      routeResolve(routeParams)
+        .then(res => resolve(res));
+    } else {
+      resolve(null);
+    }
+  });
+};
+
+/* @name resolveRoutePlugin
+ * @description Ensures any route data is resolved (client-side) before the
+                new route is visible
+ */
+function resolveRoutePlugin(routeUrl, { cache, resolvedData, resolve, routeParams }, isHistoryEvent) {
   const { pathname, search } = url.parse(routeUrl);
 
   //  If caching is on, then we should only
@@ -16,4 +33,4 @@ function resolve(routeUrl, { cache, resolvedData, resolve, routeParams }, isHist
   }
 }
 
-export default resolve;
+export default resolveRoutePlugin;

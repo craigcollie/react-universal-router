@@ -1,7 +1,19 @@
 import url from 'url';
-import propInjector from './utils/propInjector';
+import { renderToString } from 'react-dom/server';
+
+import { resolveRoute } from './plugins/resolveRoutePlugin';
 import matchRoute from './utils/matchRoute';
-import resolveRoute from './utils/resolveRoute';
+
+const propInjector = (props, htmlComponent) => {
+  const RootComponent = htmlComponent;
+  const dataProps = JSON.stringify(props);
+  return `
+      <script id='app-props' type='application/json'>
+        <![CDATA[${dataProps}]]>
+      </script>
+      <div>${renderToString(RootComponent(props))}</div>
+    `;
+};
 
 function createTinyServer(RootComponent, routes, template) {
 
