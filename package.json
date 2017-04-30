@@ -14,6 +14,7 @@
     "test": "mocha -r jsdom-global/register --compilers js:babel-register 'src/**/*-spec.js'"
   },
   "dependencies": {
+    "handlebars": "^4.0.7",
     "lodash": "^4.17.4",
     "prop-types": "^15.5.8",
     "react": "^15.5.4",

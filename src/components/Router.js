@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import isArray from 'lodash/isArray';
 import PropTypes from 'prop-types';
 
 /* @name Router
@@ -29,7 +28,7 @@ class Router extends Component {
       );
     };
 
-    if (isArray(routes)) {
+    if (Array.isArray(routes)) {
       return getRoutes()
         .filter(route => (location.pathname === route.props.path))
         .map(mapVisibleRoute)[0];
