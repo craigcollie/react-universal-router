@@ -1,4 +1,5 @@
 // @flow
+import type { FunctionalComponent } from './../types/ReactTypes';
 
 export type Route = {
   meta: { title: string, description: string },
@@ -7,3 +8,5 @@ export type Route = {
   routeParams: { [key: string]: any },
   resolve: Promise<any>,
 };
+
+export type RouteComponent = FunctionalComponent<{ props: Route }>;

@@ -1,22 +1,19 @@
 // @flow
 import type { Location } from './../types/Location';
-import type { Route } from './../types/Route';
-import type { FunctionalComponent } from './../types/ReactTypes';
+import type { Route, RouteComponent } from './../types/Route';
 
-const getRouteMap = (
-  { path, resolve, routeParams, cache = false, meta },
-  location,
-  resolvedData
-) => ({
-  location,
-  resolve,
-  routeParams,
-  resolvedData: (path === location.pathname) ? resolvedData : null,
-  cache,
-  meta,
-});
+function getRouteMap(route, location, resolvedData) {
+  const { path, resolve, routeParams, cache = false, meta } = route;
 
-type RouteComponent = FunctionalComponent<{ props: Route }>;
+  return {
+    location,
+    resolve,
+    routeParams,
+    resolvedData: (path === location.pathname) ? resolvedData : null,
+    cache,
+    meta,
+  };
+}
 
 function getRouteMapping(
   routes: Array<RouteComponent> | RouteComponent,
