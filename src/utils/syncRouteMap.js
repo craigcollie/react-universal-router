@@ -1,8 +1,11 @@
-/* @name syncRouteMap
- * @description Keeps all route data in sync with when additional
-                routes are loaded and data is resolved
- */
-function syncRouteMap(location, routeMapping, resolvedData) {
+// @flow
+import type { Location } from './../types/Location';
+
+function syncRouteMap(
+  location: Location,
+  routeMapping: { [key: string]: any },
+  resolvedData: ?{ [key: string]: any }
+) {
   const { pathname } = location;
   const { resolvedData: cachedData } = routeMapping[pathname];
 
