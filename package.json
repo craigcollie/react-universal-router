@@ -11,7 +11,7 @@
     "postinstall": "yarn bundle",
     "bundle": "babel src --out-dir dist",
     "watch": "babel src --out-dir dist --watch",
-    "test": "mocha --compilers js:babel-register 'src/**/*-spec.js'"
+    "test": "mocha -r jsdom-global/register --compilers js:babel-register 'src/**/*-spec.js'"
   },
   "dependencies": {
     "lodash": "^4.17.4",
@@ -29,9 +29,11 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
     "enzyme": "^2.8.2",
-    "jsdom": "^10.0.0",
+    "jsdom": "9.12.0",
     "jsdom-global": "^2.1.1",
-    "mocha": "^3.3.0"
+    "mocha": "^3.3.0",
+    "sinon": "^2.1.0"
   }
 }

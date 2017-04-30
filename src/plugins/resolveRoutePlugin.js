@@ -18,17 +18,22 @@ const isRouteCached = ({ cache, resolvedData }) =>
 function resolveRoutePlugin(
   location: string,
   route: Route,
-  isHistoryEvent: boolean
+  isHistoryEvent: boolean,
+  callback: () => (any)
 ) {
   const locationObject = url.parse(location);
   const { pathname, search } = locationObject;
 
   if (!isRouteCached(route)) {
-    return this.updateRouteMap(locationObject);
+    return callback(locationObject);
   }
 
   return resolveRoute(route)
-    .then(newResolvedData => this.updateRouteMap(locationObject, newResolvedData));
+    .then(newResolvedData =>
+      callback(locationObject, newResolvedData)
+    ).catch((err) => {
+      console.error(err);
+    });
 }
 
 export default resolveRoutePlugin;

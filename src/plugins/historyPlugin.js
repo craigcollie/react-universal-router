@@ -12,7 +12,9 @@ function historyPlugin(
     const { title } = meta;
     const locationObject = { page: location };
 
-    history.pushState(locationObject, title, location);
+    if (typeof window !== 'undefined') {
+      window.history.pushState(locationObject, title, location);
+    }
   }
 }
 
