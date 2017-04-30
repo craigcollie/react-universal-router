@@ -1,20 +1,14 @@
-import isArray from 'lodash/isArray';
+// @flow
+import type { RouteComponent } from './../types/Route';
 
-const isPathMatch = (item, pathname) =>
-  (item.props.path === pathname);
-
-/*
- * @name matchRoute
- * @description Ensure the child components we're matching are 'Route' and the path matches
- */
-const matchRoute = (routes, pathname) => {
-  const childRoutes = routes().props.children;
-
-  if (isArray(childRoutes)) {
-    return childRoutes.filter(item => isPathMatch(item, pathname));
+function matchRoute(
+  routes: Array<RouteComponent> | RouteComponent,
+  pathname: string,
+) {
+  if (Array.isArray(routes)) {
+    return routes.filter(item => (item.props.path === pathname));
   }
-
-  return childRoutes;
-};
+  return routes;
+}
 
 export default matchRoute;

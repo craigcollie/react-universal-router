@@ -19,7 +19,7 @@ function resolveRoutePlugin(
   location: string,
   route: Route,
   isHistoryEvent: boolean,
-  callback: () => (any)
+  callback: Function,
 ) {
   const locationObject = url.parse(location);
   const { pathname, search } = locationObject;

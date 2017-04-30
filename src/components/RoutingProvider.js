@@ -23,12 +23,12 @@ class RoutingProvider extends Component {
     super(props);
 
     const { location, resolvedData, routes } = props;
-    const definedRoutes = routes().props.children;
-    const routeMapping = createRouteMapping(definedRoutes, location, resolvedData);
+    const routeNodes = routes().props.children;
+    const routeMapping = createRouteMapping(routeNodes, location, resolvedData);
 
     this.state = {
       location,
-      routes: definedRoutes,
+      routes: routeNodes,
       routeMapping,
     };
 

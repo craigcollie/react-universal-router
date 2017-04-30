@@ -18,7 +18,8 @@ const propInjector = (props, htmlComponent) => {
 function createTinyServer(RootComponent, routes, template) {
   return function (req, res, next) {
     const { pathname, search } = url.parse(req.url);
-    const activeRoute = matchRoute(routes, pathname);
+    const routeNodes = routes().props.children;
+    const activeRoute = matchRoute(routeNodes, pathname);
 
     //  We don't need it!
     if (!activeRoute.length) next();
