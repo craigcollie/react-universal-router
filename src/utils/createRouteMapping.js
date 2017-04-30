@@ -1,12 +1,13 @@
-import isArray from 'lodash/isArray';
+// @flow
+import type { Location } from './../types/Location';
+import type { Route } from './../types/Route';
+import type { FunctionalComponent } from './../types/ReactTypes';
 
-const getRouteMap = ({
-  path,
-  resolve,
-  routeParams,
-  cache = false,
-  meta,
-}, location, resolvedData) => ({
+const getRouteMap = (
+  { path, resolve, routeParams, cache = false, meta },
+  location,
+  resolvedData
+) => ({
   location,
   resolve,
   routeParams,
@@ -15,14 +16,15 @@ const getRouteMap = ({
   meta,
 });
 
-/*
- * @name getRouteMapping
- * @description Creates a map of all <Route /> components and their props.
- */
-function getRouteMapping(routes, location, resolvedData) {
+type RouteComponent = FunctionalComponent<{ props: Route }>;
 
+function getRouteMapping(
+  routes: Array<RouteComponent> | RouteComponent,
+  location: Location,
+  resolvedData: { [key: string]: any }
+) {
   //  Reduce all routes props to a single object
-  if (isArray(routes)) {
+  if (Array.isArray(routes)) {
     return routes.reduce((acc, route) => {
       const { path } = route.props;
       acc[path] = getRouteMap(route.props, location, resolvedData);
@@ -30,7 +32,7 @@ function getRouteMapping(routes, location, resolvedData) {
     }, {});
   }
 
-  //  Routes is singular
+  //  Only one route
   const { path } = routes.props;
   return {
     [path]: getRouteMap(routes.props, location, resolvedData),
