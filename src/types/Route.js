@@ -2,6 +2,7 @@
 import type { FunctionalComponent } from './../types/ReactTypes';
 
 export type Route = {
+  path: string,
   meta: { title: string, description: string },
   cache: boolean,
   resolvedData: { [key: string]: any },

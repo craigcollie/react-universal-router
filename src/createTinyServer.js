@@ -6,6 +6,8 @@ import { renderToString } from 'react-dom/server';
 import { resolveRoute } from './plugins/resolveRoutePlugin';
 import matchRoute from './utils/matchRoute';
 import getTemplateTokens from './utils/getTemplateTokens';
+import getParamsFromUrl from './utils/getParamsFromUrl';
+import getRouteMap from './utils/getRouteMap';
 
 function generateServerProps(props, htmlComponent) {
   const RootComponent = htmlComponent;
@@ -22,17 +24,19 @@ function createTinyServer({ clientApp, routes, template }) {
   return function (req, res, next) {
     const { pathname, search } = url.parse(req.url);
     const routeNodes = routes().props.children;
-    const activeRoute = matchRoute(routeNodes, pathname);
+    const currentRoute = matchRoute(routeNodes, pathname);
 
     //  Handoff to the next middleware if
     //  no routes match
-    if (!activeRoute.length) next();
+    // if (!activeRoute.length) next();
 
-    //  Perform any route resolves here first
-    const currentRoute = activeRoute[0].props;
-    const { resolve, routeParams } = currentRoute;
+    const { path, resolve } = currentRoute;
 
-    resolveRoute(currentRoute)
+    //  Convert URL to params
+    const routeParams = getParamsFromUrl(path, pathname);
+    const routeMap = getRouteMap(routeNodes, path, routeParams);
+
+    resolveRoute(resolve, routeParams)
       .then(resolvedData => {
 
         let templateString = template.toString();
@@ -40,6 +44,7 @@ function createTinyServer({ clientApp, routes, template }) {
 
         //  Populate the token and apply any
         let tokenProps = {};
+
         forEach(templateTokens, (val, key) => {
           set(tokenProps, key, val);
           templateString = templateString.replace(`<% ${key} %>`, val);
@@ -48,6 +53,7 @@ function createTinyServer({ clientApp, routes, template }) {
         const props = {
           location: { pathname, search },
           resolvedData,
+          routeMap,
           ...tokenProps,
         };
 

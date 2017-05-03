@@ -7,17 +7,20 @@ function syncRouteMap(
   resolvedData: ?{ [key: string]: any }
 ) {
   const { pathname } = location;
-  const { resolvedData: cachedData } = routeMapping[pathname];
+  console.log('trying to update data for ', pathname);
 
-  return {
-    routeMapping: Object.assign({}, routeMapping, {
-      [pathname]: {
-        ...routeMapping[pathname],
-        resolvedData: (resolvedData ? resolvedData : cachedData),
-      }
-    }),
-    location
-  }
+  // const { pathname } = location;
+  // const { resolvedData: cachedData } = routeMapping[pathname];
+  //
+  // return {
+  //   routeMapping: Object.assign({}, routeMapping, {
+  //     [pathname]: {
+  //       ...routeMapping[pathname],
+  //       resolvedData: (resolvedData ? resolvedData : cachedData),
+  //     }
+  //   }),
+  //   location
+  // }
 }
 
 export default syncRouteMap;

@@ -1,51 +1,41 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-/* @name Router
- * @description Replaces the <Route /> with the required component
-                and injects resolved props and location from the routing context
- */
+import matchRoute from './../utils/matchRoute';
+
 class Router extends Component {
   render() {
     const {
       getLocation,
       getRoutes,
-      getRouteMap
+      getResolvedData,
     } = this.context;
 
+    //  Get location from <RouteProvider />
     const location = getLocation();
-    const routes = getRoutes();
 
-    const mapVisibleRoute = (route) => {
-      const { path, component: ComponentView } = route.props;
-      const { resolvedData } = getRouteMap(path);
+    //  Get data from <RouteProvider />
+    const resolvedData = getResolvedData(location.pathname);
 
-      return (
-        <ComponentView
-          location={location}
-          resolvedData={resolvedData}
-        />
-      );
-    };
+    //  Routes can be pattern matched
+    //  So a /path/:id can be used
+    const {
+      component: ComponentView
+    } = matchRoute(getRoutes(), location.pathname);
 
-    if (Array.isArray(routes)) {
-      return getRoutes()
-        .filter(route => (location.pathname === route.props.path))
-        .map(mapVisibleRoute)[0];
-    }
-
-    if (routes.props.path !== location.pathname) {
-      return (<div>Route not found</div>);
-    }
-
-    return mapVisibleRoute(routes);
+    return (
+      <ComponentView
+        location={location}
+        resolvedData={resolvedData}
+      />
+    );
   }
 }
 
 Router.contextTypes = {
-  getLocation: PropTypes.func.isRequired,
-  getRoutes: PropTypes.func.isRequired,
-  getRouteMap: PropTypes.func,
+  getLocation: PropTypes.func,
+  getRoutes: PropTypes.func,
+  getResolvedData: PropTypes.func,
 };
 
 export default Router;

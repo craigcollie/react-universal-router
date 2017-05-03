@@ -4,9 +4,8 @@ import type { Route, RouteComponent } from './../types/Route';
 
 function getRouteMap(route, location, resolvedData) {
   const { path, resolve, routeParams, cache = false, meta } = route;
-
   return {
-    location,
+    pathname: path,
     resolve,
     routeParams,
     resolvedData: (path === location.pathname) ? resolvedData : null,

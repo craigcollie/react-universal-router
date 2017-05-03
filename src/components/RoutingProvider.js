@@ -3,62 +3,43 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import forEach from 'lodash/forEach';
 
-import metaPlugin from './../plugins/metaPlugin';
-import historyPlugin from './../plugins/historyPlugin';
-import resolveRoutePlugin from './../plugins/resolveRoutePlugin';
-
 import syncRouteMap from './../utils/syncRouteMap';
 import createRouteMapping from './../utils/createRouteMapping';
-
-const getPluginFn = (item) => {
-  if (typeof item === 'function') {
-    return item;
-  } else {
-    return item.fn;
-  }
-};
+import matchRoute from './../utils/matchRoute';
+import getParamsFromUrl from './../utils/getParamsFromUrl';
 
 class RoutingProvider extends Component {
   constructor(props) {
     super(props);
 
-    const { location, resolvedData, routes } = props;
-    const routeNodes = routes().props.children;
-    const routeMapping = createRouteMapping(routeNodes, location, resolvedData);
+    const {
+      location,
+      routeMap,
+      routes,
+      resolvedData
+    } = props;
 
     this.state = {
       location,
-      routes: routeNodes,
-      routeMapping,
+      routeMap,
+      routes: routes().props.children,
+      data: {
+        //  Add server data to initial route
+        [location.pathname]: resolvedData,
+      }
     };
 
-    this.updateRouteMap = this.updateRouteMap.bind(this);
     this.onRouteChange = this.onRouteChange.bind(this);
-
-    //  TODO - extend this from the context definition
-    this.plugins = {
-      metaPlugin,
-      historyPlugin,
-      resolveRoutePlugin: {
-        fn: resolveRoutePlugin,
-        callback: this.updateRouteMap,
-      },
-    };
   }
 
   getChildContext() {
-    const {
-      routes,
-      location,
-      routeMapping
-    } = this.state;
-
+    const { location, data, routes } = this.state;
     return {
-      onRouteChange: this.onRouteChange,
-      getRouteMap: (path) => (routeMapping[path]),
-      getRoutes: () => (routes),
       getLocation: () => (location),
-    }
+      getRoutes: () => (routes),
+      getResolvedData: (pathname) => (data[pathname]),
+      onRouteChange: this.onRouteChange,
+    };
   }
 
   componentDidMount() {
@@ -69,28 +50,43 @@ class RoutingProvider extends Component {
     };
   }
 
-  updateRouteMap(location, resolvedData) {
-    const { routeMapping } = this.state;
-    this.setState(syncRouteMap(location, routeMapping, resolvedData));
+  updateRoute(location, resolvedData) {
+    const { data } = this.state;
+    const { pathname, search } = location;
+
+    this.setState({
+      location,
+      data: { [pathname]: (resolvedData || data[pathname]) },
+    });
   }
 
-  onRouteChange(newLocation, isHistoryEvent) {
-    const { pathname } = url.parse(newLocation);
-    const { routeMapping } = this.state;
-    const route = routeMapping[pathname];
+  onRouteChange(locationString, isHistoryEvent) {
+    const { pathname, search } = url.parse(locationString);
+    const { routes } = this.state;
+    const route = matchRoute(routes, pathname);
 
     if (!route) {
-      throw new Error(`${pathname} is not a valid route`);
+      throw new Error(`${pathname} has no valid route`);
     }
 
-    forEach(this.plugins, plugin => (
-      getPluginFn(plugin).apply(this, [
-        newLocation,
-        route,
-        isHistoryEvent,
-        plugin.callback,
-      ])
-    ));
+    const { resolve } = route;
+
+    //  Add route change to window history
+    if (!isHistoryEvent) {
+      history.pushState({ page: locationString }, locationString, locationString);
+    }
+
+    //  Resolve route data and setState()
+    const routeParams = getParamsFromUrl(route.path, pathname);
+
+    if (!resolve) {
+      this.updateRoute({ pathname, search });
+    } else {
+      resolve(routeParams)
+        .then(data => {
+          this.updateRoute({ pathname, search }, data);
+        });
+    }
   }
 
   render() {
@@ -101,10 +97,10 @@ class RoutingProvider extends Component {
 }
 
 RoutingProvider.childContextTypes = {
-  onRouteChange: PropTypes.func,
-  getRoutes: PropTypes.func,
   getLocation: PropTypes.func,
-  getRouteMap: PropTypes.func,
+  getRoutes: PropTypes.func,
+  getResolvedData: PropTypes.func,
+  onRouteChange: PropTypes.func,
 };
 
 export default RoutingProvider;
