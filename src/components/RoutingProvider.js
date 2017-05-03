@@ -22,7 +22,7 @@ class RoutingProvider extends Component {
     this.state = {
       location,
       routeMap,
-      routes: routes().props.children,
+      routes,
       data: {
         //  Add server data to initial route
         [location.pathname]: resolvedData,

@@ -1,6 +1,7 @@
 import url from 'url';
 import set from 'lodash/set';
 import forEach from 'lodash/forEach';
+import isEqual from 'lodash/isEqual';
 import { renderToString } from 'react-dom/server';
 
 import { resolveRoute } from './plugins/resolveRoutePlugin';
@@ -23,18 +24,19 @@ function generateServerProps(props, htmlComponent) {
 function createTinyServer({ clientApp, routes, template }) {
   return function (req, res, next) {
     const { pathname, search } = url.parse(req.url);
-    const routeNodes = routes().props.children;
-    const currentRoute = matchRoute(routeNodes, pathname);
 
-    //  Handoff to the next middleware if
-    //  no routes match
-    // if (!activeRoute.length) next();
+    const currentRoute = matchRoute(routes, pathname);
+
+    //  If no routes match, handoff to next middleware
+    if (isEqual(currentRoute, {})) {
+      return next();
+    };
 
     const { path, resolve } = currentRoute;
 
     //  Convert URL to params
     const routeParams = getParamsFromUrl(path, pathname);
-    const routeMap = getRouteMap(routeNodes, path, routeParams);
+    const routeMap = getRouteMap(routes, path, routeParams);
 
     resolveRoute(resolve, routeParams)
       .then(resolvedData => {

@@ -1,6 +1,6 @@
+// @flow
 function getParamsFromUrl(routePath, pathname) {
   const pathnameParts = pathname.split('/');
-
   return routePath.split('/').map((part, i, arr) => {
     if (part.indexOf(':') !== -1) {
       const key = arr[i].split(':').pop();

@@ -2,6 +2,9 @@
 import type { RouteComponent } from './../types/Route';
 
 function isMatchingPathname(pathname, routeParams) {
+  if (!routeParams) {
+    return false;
+  }
   const pathnameParts = pathname.split('/');
   const constructedPathname = routeParams.input.split('/').map((param, i) => {
     if (param.indexOf(':') !== -1) {
@@ -17,22 +20,24 @@ function matchRoute(
   routes: Array<RouteComponent> | RouteComponent,
   pathname: string,
 ) {
-  if (!Array.isArray(routes)) {
-    return routes.props;
+  const routeNodes = routes().props.children;
+
+  if (Array.isArray(routeNodes)) {
+    return routeNodes
+      .filter(route => {
+        let { path } = route.props;
+        const routeParams = path.match(/\:+(.+)$/i);
+        return (path === pathname) ||
+               (isMatchingPathname(pathname, routeParams));
+      })
+      .reduce((acc, route) => {
+        acc = { ...route.props };
+        return acc;
+      }, {});
+
+  } else {
+    return routes().props;
   }
-
-  return routes
-    .filter(route => {
-      let { path } = route.props;
-      const routeParams = path.match(/\:+(.+)$/i);
-
-      return (path === pathname) ||
-             (routeParams && isMatchingPathname(pathname, routeParams));
-    })
-    .reduce((acc, route) => {
-      acc = { ...route.props };
-      return acc;
-    }, {});
 }
 
 export default matchRoute;
