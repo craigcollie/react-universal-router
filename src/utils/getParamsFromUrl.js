@@ -14,8 +14,7 @@ function getParamsFromUrl(
   return userDefinedRoute.split('/').reduce((acc, part, i, arr) => {
     if (hasParam(part)) {
       const key = arr[i].split(':').pop();
-      const value = locationPathnameParts[i];
-      acc[key] = value;
+      acc[key] = locationPathnameParts[i];
     }
     return acc;
   }, {});
