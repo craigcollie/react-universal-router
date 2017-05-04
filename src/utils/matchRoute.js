@@ -1,7 +1,7 @@
 // @flow
 import type { RouteComponent } from './../types/Route';
 
-function isMatchingPathname(pathname, routeParams) {
+function isMatchingPathname(pathname: string, routeParams): boolean {
   if (!routeParams) {
     return false;
   }

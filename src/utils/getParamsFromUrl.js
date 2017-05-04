@@ -1,19 +1,22 @@
 // @flow
-function getParamsFromUrl(routePath, pathname) {
-  const pathnameParts = pathname.split('/');
-  return routePath.split('/').map((part, i, arr) => {
-    if (part.indexOf(':') !== -1) {
+type Params = {
+  [key: string]: mixed
+};
+
+const hasParam = (str:string) => (str.indexOf(':') !== -1);
+
+function getParamsFromUrl(
+  userDefinedRoute: string,
+  locationPathname: string
+): Params {
+  const locationPathnameParts = locationPathname.split('/');
+
+  return userDefinedRoute.split('/').reduce((acc, part, i, arr) => {
+    if (hasParam(part)) {
       const key = arr[i].split(':').pop();
-      return {
-        [key]: pathnameParts[i]
-      };
+      const value = locationPathnameParts[i];
+      acc[key] = value;
     }
-  })
-  .filter(Boolean)
-  .reduce((acc, item) => {
-    const key = Object.keys(item)[0];
-    const value = Object.values(item)[0];
-    acc[key] = value;
     return acc;
   }, {});
 }

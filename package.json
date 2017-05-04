@@ -11,7 +11,8 @@
     "postinstall": "yarn bundle",
     "bundle": "babel src --out-dir dist",
     "watch": "babel src --out-dir dist --watch",
-    "test": "mocha -r jsdom-global/register --compilers js:babel-register 'src/**/*-spec.js'"
+    "test": "mocha --opts .mocharc 'src/**/*-spec.js'",
+    "mochaSingle": "mocha --opts .mocharc src/**/$test*-spec.js -w"
   },
   "dependencies": {},
   "devDependencies": {

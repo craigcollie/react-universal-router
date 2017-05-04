@@ -11,3 +11,5 @@ export type Route = {
 };
 
 export type RouteComponent = FunctionalComponent<{ props: Route }>;
+
+export type Routes = Array<RouteComponent> | RouteComponent;

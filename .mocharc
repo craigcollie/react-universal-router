@@ -1,0 +1,2 @@
+jsdom-global/register
+--compilers js:babel-register

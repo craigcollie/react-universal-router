@@ -1,3 +1,10 @@
+// @flow
+import type { RouteComponent } from './../types/Route';
+
+type Params = {
+  [key: string]: mixed
+};
+
 function getPathMap(path) {
   const map = {
     '/': 'root',
@@ -5,7 +12,11 @@ function getPathMap(path) {
   return (map[path] || path);
 }
 
-function getRouteMap(routes, path, routeParams) {
+function getRouteMap(
+  routes: Array<RouteComponent> | RouteComponent,
+  path: string,
+  routeParams: Params
+) {
   const routeNodes = routes().props.children;
 
   if (Array.isArray(routeNodes)) {
