@@ -1,4 +1,4 @@
-# Tiny universal
+# Tiny universal [![Build Status](https://travis-ci.org/craigcollie/tiny-universal.svg?branch=master)](https://travis-ci.org/craigcollie/tiny-universal)
 A universal router for React.
 
 ### Requirements
