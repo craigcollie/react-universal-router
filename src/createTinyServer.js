@@ -36,7 +36,7 @@ function createTinyServer({ clientApp, routes, template }) {
 
     //  Convert URL to params
     const routeParams = getParamsFromUrl(path, pathname);
-    const routeMap = getRouteMap(routes, path, routeParams);
+    const routeMap = getRouteMap(routes);
 
     resolveRoute(resolve, routeParams)
       .then(resolvedData => {
