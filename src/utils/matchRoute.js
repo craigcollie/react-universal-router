@@ -1,5 +1,5 @@
 // @flow
-import type { RouteComponent } from './../types/Route';
+import type { RouteNodes, RouteComponent } from './../types/Route';
 
 function isMatchingPathname(path: string, pathname: string): boolean {
   //  Try to extract /:foo/:bar from route path
@@ -17,9 +17,9 @@ function isMatchingPathname(path: string, pathname: string): boolean {
 }
 
 function matchRoute(
-  routes: Array<RouteComponent> | RouteComponent,
+  routes: RouteNodes,
   pathname: string,
-) {
+): Route {
   const routeNodes = routes().props.children;
 
   if (Array.isArray(routeNodes)) {
