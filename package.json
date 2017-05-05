@@ -20,7 +20,6 @@
     "prop-types": "^15.5.8",
     "react": "^15.5.4",
     "react-dom": "15.4.2",
-    "url": "^0.11.0",
     "babel": "^6.23.0",
     "babel-cli": "^6.24.1",
     "babel-loader": "^7.0.0",

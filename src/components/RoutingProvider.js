@@ -1,8 +1,8 @@
-import url from 'url';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import forEach from 'lodash/forEach';
 
+import parseUrl from './../utils/parseUrl';
 import syncRouteMap from './../utils/syncRouteMap';
 import createRouteMapping from './../utils/createRouteMapping';
 import matchRoute from './../utils/matchRoute';
@@ -61,7 +61,7 @@ class RoutingProvider extends Component {
   }
 
   onRouteChange(locationString, isHistoryEvent) {
-    const { pathname, search } = url.parse(locationString);
+    const { pathname, search } = parseUrl(locationString);
     const { routes } = this.state;
     const route = matchRoute(routes, pathname);
 
