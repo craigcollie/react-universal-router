@@ -1,14 +1,18 @@
-import url from 'url';
+// @flow
+
 import set from 'lodash/set';
 import forEach from 'lodash/forEach';
 import isEqual from 'lodash/isEqual';
 import { renderToString } from 'react-dom/server';
 
 import { resolveRoute } from './plugins/resolveRoutePlugin';
+import parseUrl from './utils/parseUrl';
 import matchRoute from './utils/matchRoute';
 import getTemplateTokens from './utils/getTemplateTokens';
 import getParamsFromUrl from './utils/getParamsFromUrl';
 import getRouteMap from './utils/getRouteMap';
+
+import type { RouteNodes } from './types/Route';
 
 function generateServerProps(props, htmlComponent) {
   const RootComponent = htmlComponent;
@@ -21,9 +25,19 @@ function generateServerProps(props, htmlComponent) {
     `;
 };
 
-function createTinyServer({ clientApp, routes, template }) {
+type TinyServer = {
+  clientApp: ReactComponent,
+  routes: RouteNodes,
+  template: string,
+}
+
+function createTinyServer({
+  clientApp,
+  routes,
+  template
+}: TinyServer) {
   return function (req, res, next) {
-    const { pathname, search } = url.parse(req.url);
+    const { pathname, search } = parseUrl(req.url);
 
     const currentRoute = matchRoute(routes, pathname);
 
