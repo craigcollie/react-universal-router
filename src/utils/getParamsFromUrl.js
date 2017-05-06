@@ -7,7 +7,7 @@ const hasParam = (str:string) => (str.indexOf(':') !== -1);
 
 function getParamsFromUrl(
   userDefinedRoute: string,
-  locationPathname: string
+  locationPathname: string,
 ): Params {
   const locationPathnameParts = locationPathname.split('/');
 

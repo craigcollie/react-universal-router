@@ -1,5 +1,5 @@
 // @flow
-import type { Route, RouteNodes, RouteComponent } from './../types/Route';
+import type { RouteNodes } from './../types/Route';
 
 function getPathMap(path: string): string {
   const map = {
@@ -20,13 +20,14 @@ function getRouteMap(
         acc[getPathMap(path)] = { path, component, resolve, meta };
         return acc;
       }, {});
-
-  } else {
-    const routeNode = routes().props;
-    const { path, component, resolve, meta } = routeNode;
-
-    return { [getPathMap(path)]: { path, component, resolve, meta } };
   }
+
+  const routeNode = routes().props;
+  const { path, component, resolve, meta } = routeNode;
+
+  return {
+    [getPathMap(path)]: { path, component, resolve, meta },
+  };
 }
 
 export default getRouteMap;

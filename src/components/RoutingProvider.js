@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import forEach from 'lodash/forEach';
 
 import parseUrl from './../utils/parseUrl';
-import syncRouteMap from './../utils/syncRouteMap';
-import createRouteMapping from './../utils/createRouteMapping';
 import matchRoute from './../utils/matchRoute';
 import getParamsFromUrl from './../utils/getParamsFromUrl';
 
@@ -16,7 +13,7 @@ class RoutingProvider extends Component {
       location,
       routeMap,
       routes,
-      resolvedData
+      resolvedData = {},
     } = props;
 
     this.state = {
@@ -24,9 +21,8 @@ class RoutingProvider extends Component {
       routeMap,
       routes,
       data: {
-        //  Add server data to initial route
         [location.pathname]: resolvedData,
-      }
+      },
     };
 
     this.onRouteChange = this.onRouteChange.bind(this);
@@ -37,7 +33,7 @@ class RoutingProvider extends Component {
     return {
       getLocation: () => (location),
       getRoutes: () => (routes),
-      getResolvedData: (pathname) => (data[pathname]),
+      getResolvedData: pathname => (data[pathname]),
       onRouteChange: this.onRouteChange,
     };
   }
@@ -48,16 +44,6 @@ class RoutingProvider extends Component {
       const locationString = `${pathname}${search}`;
       this.onRouteChange(locationString, true);
     };
-  }
-
-  updateRoute(location, resolvedData) {
-    const { data } = this.state;
-    const { pathname, search } = location;
-
-    this.setState({
-      location,
-      data: { [pathname]: (resolvedData || data[pathname]) },
-    });
   }
 
   onRouteChange(locationString, isHistoryEvent) {
@@ -83,10 +69,18 @@ class RoutingProvider extends Component {
       this.updateRoute({ pathname, search });
     } else {
       resolve(routeParams)
-        .then(data => {
-          this.updateRoute({ pathname, search }, data);
-        });
+        .then(data => this.updateRoute({ pathname, search }, data));
     }
+  }
+
+  updateRoute(location, resolvedData) {
+    const { data } = this.state;
+    const { pathname } = location;
+
+    this.setState({
+      location,
+      data: { [pathname]: (resolvedData || data[pathname]) },
+    });
   }
 
   render() {
@@ -95,6 +89,38 @@ class RoutingProvider extends Component {
     );
   }
 }
+
+RoutingProvider.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+    search: PropTypes.string,
+  }).isRequired,
+  routeMap: PropTypes.shape({
+    path: PropTypes.string.isRequired,
+    component: PropTypes.oneOfType([
+      PropTypes.node,
+      PropTypes.element,
+    ]).isRequired,
+    resolve: PropTypes.func,
+    meta: PropTypes.shape({
+      title: PropTypes.string,
+      description: PropTypes.string,
+    }),
+  }).isRequired,
+  routes: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.element,
+  ]).isRequired,
+  resolvedData: PropTypes.oneOfType([
+    PropTypes.object,
+    null,
+  ]).isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.element,
+    PropTypes.string,
+  ]).isRequired,
+};
 
 RoutingProvider.childContextTypes = {
   getLocation: PropTypes.func,

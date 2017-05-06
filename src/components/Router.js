@@ -1,37 +1,35 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import matchRoute from './../utils/matchRoute';
 import getParamsFromUrl from './../utils/getParamsFromUrl';
 
-class Router extends Component {
-  render() {
-    const {
-      getLocation,
-      getRoutes,
-      getResolvedData,
-    } = this.context;
+const Router = (props, context) => {
+  const {
+    getLocation,
+    getRoutes,
+    getResolvedData,
+  } = context;
 
-    //  Get location from <RouteProvider />
-    const location = getLocation();
+  //  Get location from <RouteProvider />
+  const location = getLocation();
 
-    //  Get data from <RouteProvider />
-    const resolvedData = getResolvedData(location.pathname);
+  //  Get data from <RouteProvider />
+  const resolvedData = getResolvedData(location.pathname);
 
-    //  Routes can be pattern matched
-    //  So a /path/:id can be used
-    const { path, component: ComponentView } = matchRoute(getRoutes(), location.pathname);
-    const routeParams = getParamsFromUrl(path, location.pathname);
+  //  Routes can be pattern matched
+  //  So a /path/:id can be used
+  const { path, component: ComponentView } = matchRoute(getRoutes(), location.pathname);
+  const routeParams = getParamsFromUrl(path, location.pathname);
 
-    return (
-      <ComponentView
-        location={location}
-        resolvedData={resolvedData}
-        routeParams={routeParams}
-      />
-    );
-  }
-}
+  return (
+    <ComponentView
+      location={location}
+      resolvedData={resolvedData}
+      routeParams={routeParams}
+    />
+  );
+};
 
 Router.contextTypes = {
   getLocation: PropTypes.func,

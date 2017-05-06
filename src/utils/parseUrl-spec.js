@@ -2,16 +2,16 @@ import { expect } from 'chai';
 
 import parseUrl from './parseUrl';
 
-describe('parseUrl', () => {
+describe('Utils: parseUrl', () => {
   const tests = [
     {
       location: '/foo/blah',
-      result: { pathname: '/foo/blah', search: undefined }
+      result: { pathname: '/foo/blah', search: undefined },
     },
     {
       location: '/foo/blah?a=b&c=d',
-      result: { pathname: '/foo/blah', search: 'a=b&c=d' }
-    }
+      result: { pathname: '/foo/blah', search: 'a=b&c=d' },
+    },
   ];
 
   tests.forEach(({ location, result }) => {

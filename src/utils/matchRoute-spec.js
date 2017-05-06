@@ -4,9 +4,9 @@ import { expect } from 'chai';
 import matchRoute from './matchRoute';
 import Route from './../components/Route';
 
-const Test = () => (<div></div>);
+const Test = () => (<div />);
 
-describe('matchRoute', () => {
+describe('Utils: matchRoute', () => {
   describe('single route', () => {
     const Routes = () => (
       <Route path="/foo/:id" component={Test} />
@@ -15,7 +15,7 @@ describe('matchRoute', () => {
     const tests = [
       {
         path: '/foo/1',
-        result: { path: '/foo/:id', component: Test }
+        result: { path: '/foo/:id', component: Test },
       },
     ];
 

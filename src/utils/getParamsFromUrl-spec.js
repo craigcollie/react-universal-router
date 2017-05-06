@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 import getParamsFromUrl from './getParamsFromUrl';
 
-describe('getParamsFromUrl', () => {
+describe('Utils: getParamsFromUrl', () => {
   const tests = [
     {
       userDefinedRoute: '/foo',
@@ -12,13 +12,13 @@ describe('getParamsFromUrl', () => {
     {
       userDefinedRoute: '/foo/:id',
       locationString: '/foo/123',
-      result: { id: '123' }
+      result: { id: '123' },
     },
     {
       userDefinedRoute: '/blah/:foo/:id/:path',
       locationString: '/blah/a/b/c',
-      result: { foo: 'a', id: 'b', path: 'c' }
-    }
+      result: { foo: 'a', id: 'b', path: 'c' },
+    },
   ];
 
   tests.forEach(({ userDefinedRoute, locationString, result }) => {

@@ -1,17 +1,15 @@
 // @flow
-import type { RouteNodes, RouteComponent } from './../types/Route';
+import type { RouteNodes } from './../types/Route';
 
 function isMatchingPathname(path: string, pathname: string): boolean {
   //  Try to extract /:foo/:bar from route path
-  const routeParams = path.match(/\:+(.+)$/i);
+  const routeParams = path.match(/:+(.+)$/i);
   if (!routeParams) return false;
 
   const pathnameParts = pathname.split('/');
-  const constructedPathname = path.split('/').map((param, i) => {
-    return (param.indexOf(':') !== -1)
-      ? pathnameParts[i]
-      : param;
-  }).join('/');
+  const constructedPathname = path.split('/')
+    .map((param, i) => (param.indexOf(':') !== -1 ? pathnameParts[i] : param))
+    .join('/');
 
   return (pathname === constructedPathname);
 }
@@ -19,21 +17,20 @@ function isMatchingPathname(path: string, pathname: string): boolean {
 function matchRoute(
   routes: RouteNodes,
   pathname: string,
-): Route {
+) {
   const routeNodes = routes().props.children;
 
   if (Array.isArray(routeNodes)) {
-    return routeNodes.reduce((acc, route, i, arr) => {
+    return routeNodes.reduce((acc, route) => {
       const { path } = route.props;
       if ((path === pathname) || isMatchingPathname(path, pathname)) {
-        acc = { ...route.props };
+        acc = { ...route.props }; // eslint-disable-line
       }
       return acc;
     }, {});
-
-  } else {
-    return routes().props;
   }
+
+  return routes().props;
 }
 
 export default matchRoute;

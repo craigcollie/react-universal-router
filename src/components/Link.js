@@ -26,7 +26,7 @@ class Link extends Component {
 
 Link.propTypes = {
   to: PropTypes.string.isRequired,
-  text: PropTypes.string,
+  text: PropTypes.string.isRequired,
 };
 
 Link.contextTypes = {
