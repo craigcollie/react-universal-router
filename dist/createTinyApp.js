@@ -12,7 +12,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var getInjectedProps = function getInjectedProps(propContainer) {
   var props = document.getElementById(propContainer).textContent;
-  props = props.replace('<![CDATA[", "").replace("]]>', '');
+  props = props.replace("<![CDATA[", "").replace("]]>", ""); // eslint-disable-line
   return JSON.parse(props);
 };
 
