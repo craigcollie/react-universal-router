@@ -5,7 +5,7 @@ import forEach from 'lodash/forEach';
 import isEqual from 'lodash/isEqual';
 import { renderToString } from 'react-dom/server';
 
-import { resolveRoute } from './plugins/resolveRoutePlugin';
+import resolveRoute from './utils/resolveRoute';
 import parseUrl from './utils/parseUrl';
 import matchRoute from './utils/matchRoute';
 import getTemplateTokens from './utils/getTemplateTokens';
@@ -14,27 +14,26 @@ import getRouteMap from './utils/getRouteMap';
 
 import type { RouteNodes } from './types/Route';
 
-function generateServerProps(props, htmlComponent) {
-  const RootComponent = htmlComponent;
+function generateServerProps(props, root) {
   const dataProps = JSON.stringify(props);
   return `
       <script id='app-props' type='application/json'>
         <![CDATA[${dataProps}]]>
       </script>
-      <div>${renderToString(RootComponent(props))}</div>
+      <div>${renderToString(root(props))}</div>
     `;
-};
+}
 
 type TinyServer = {
-  clientApp: ReactComponent,
+  clientApp: Function,
   routes: RouteNodes,
   template: string,
-}
+};
 
 function createTinyServer({
   clientApp,
   routes,
-  template
+  template,
 }: TinyServer) {
   return function (req, res, next) {
     const { pathname, search } = parseUrl(req.url);
@@ -44,7 +43,7 @@ function createTinyServer({
     //  If no routes match, handoff to next middleware
     if (isEqual(currentRoute, {})) {
       return next();
-    };
+    }
 
     const { path, resolve } = currentRoute;
 
@@ -53,13 +52,12 @@ function createTinyServer({
     const routeMap = getRouteMap(routes);
 
     resolveRoute(resolve, routeParams)
-      .then(resolvedData => {
-
+      .then((resolvedData) => {
         let templateString = template.toString();
         const templateTokens = getTemplateTokens(templateString, currentRoute);
 
         //  Populate the token and apply any
-        let tokenProps = {};
+        const tokenProps = {};
 
         forEach(templateTokens, (val, key) => {
           set(tokenProps, key, val);
@@ -76,12 +74,12 @@ function createTinyServer({
         //  Populate the appRoot with the
         //  injected server-side props
         templateString = templateString.replace(
-          '<% appRoot %>', generateServerProps(props, clientApp)
+          '<% appRoot %>', generateServerProps(props, clientApp),
         );
 
         res.send(templateString);
       });
-  }
+  };
 }
 
 export default createTinyServer;

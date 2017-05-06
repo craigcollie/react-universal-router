@@ -96,11 +96,11 @@ RoutingProvider.propTypes = {
     search: PropTypes.string,
   }).isRequired,
   routeMap: PropTypes.shape({
-    path: PropTypes.string.isRequired,
+    path: PropTypes.string,
     component: PropTypes.oneOfType([
       PropTypes.node,
-      PropTypes.element,
-    ]).isRequired,
+      PropTypes.component,
+    ]),
     resolve: PropTypes.func,
     meta: PropTypes.shape({
       title: PropTypes.string,
@@ -109,16 +109,14 @@ RoutingProvider.propTypes = {
   }).isRequired,
   routes: PropTypes.oneOfType([
     PropTypes.node,
-    PropTypes.element,
+    PropTypes.func,
   ]).isRequired,
   resolvedData: PropTypes.oneOfType([
-    PropTypes.object,
-    null,
+    PropTypes.any,
   ]).isRequired,
   children: PropTypes.oneOfType([
     PropTypes.node,
     PropTypes.element,
-    PropTypes.string,
   ]).isRequired,
 };
 
