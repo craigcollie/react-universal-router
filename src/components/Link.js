@@ -1,27 +1,25 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-class Link extends Component {
-  constructor() {
-    super();
-    this.handleClick = this.handleClick.bind(this);
-  }
+const handleClick = (event, onRouteChange, to) => {
+  event.preventDefault();
+  onRouteChange(to);
+};
 
-  handleClick(event) {
-    const { to: pathname } = this.props;
-    const { onRouteChange } = this.context;
-    event.preventDefault();
+function Link(props, context) {
+  const { to, text } = props;
+  const { onRouteChange } = context;
 
-    //  Update the router
-    onRouteChange(pathname);
-  }
-
-  render() {
-    const { to, text } = this.props;
-    return (
-      <a href={to} onClick={this.handleClick}>{text}</a>
-    );
-  }
+  return (
+    <a
+      href={to}
+      onClick={event =>
+        (handleClick(event, onRouteChange, to))
+      }
+    >
+      {text}
+    </a>
+  );
 }
 
 Link.propTypes = {
