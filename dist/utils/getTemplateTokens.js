@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _get = require('lodash-es/get');
+var _get = require('lodash/get');
 
 var _get2 = _interopRequireDefault(_get);
 

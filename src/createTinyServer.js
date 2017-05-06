@@ -1,7 +1,7 @@
 // @flow
 
-import set from 'lodash-es/set';
-import forEach from 'lodash-es/forEach';
+import set from 'lodash/set';
+import forEach from 'lodash/forEach';
 import { renderToString } from 'react-dom/server';
 
 import resolveRoute from './utils/resolveRoute';
