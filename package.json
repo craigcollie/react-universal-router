@@ -8,13 +8,13 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn watch",
-    "watch": "babel src --out-dir dist --watch --source-maps",
+    "watch": "node -r babel-register node_modules/.bin/webpack --config=./webpack.config --watch",
     "test": "yarn mocha && yarn eslint",
     "eslint": "eslint --quiet './src/**/*.js'",
     "mocha": "mocha --opts .mocharc 'src/**/*-spec.js'",
     "mochaSingle": "mocha --opts .mocharc src/**/$test*-spec.js -w",
     "bump": "npm version patch && npm publish",
-    "bundle": "rm -rf dist && mkdir dist && yarn package",
+    "bundle": "rm -rf dist && mkdir dist && yarn package && yarn bump",
     "package": "node -r babel-register node_modules/.bin/webpack -p --config=./webpack.config"
   },
   "dependencies": {},
@@ -42,6 +42,7 @@
     "react": "15.4.2",
     "react-dom": "15.4.2",
     "sinon": "^2.1.0",
-    "webpack": "^2.5.1"
+    "webpack": "^2.5.1",
+    "webpack-node-externals": "^1.5.4"
   }
 }
