@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { PropTypes, Component } from 'react';
 
 import parseUrl from './../utils/parseUrl';
 import matchRoute from './../utils/matchRoute';

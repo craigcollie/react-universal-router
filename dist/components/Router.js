@@ -8,10 +8,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = require('prop-types');
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
 var _matchRoute2 = require('./../utils/matchRoute');
 
 var _matchRoute3 = _interopRequireDefault(_matchRoute2);
@@ -51,9 +47,10 @@ var Router = function Router(props, context) {
 };
 
 Router.contextTypes = {
-  getLocation: _propTypes2.default.func,
-  getRoutes: _propTypes2.default.func,
-  getResolvedData: _propTypes2.default.func
+  getLocation: _react.PropTypes.func,
+  getRoutes: _react.PropTypes.func,
+  getResolvedData: _react.PropTypes.func
 };
 
 exports.default = Router;
+//# sourceMappingURL=Router.js.map

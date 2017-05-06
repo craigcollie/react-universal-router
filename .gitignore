@@ -5,3 +5,7 @@ yarn.lock
 # Logs
 npm-debug.log
 yarn-error.log
+
+# Build
+build
+dist

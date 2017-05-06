@@ -13,3 +13,4 @@ function parseUrl(url) {
   return { pathname: pathname, search: search };
 }
 exports.default = parseUrl;
+//# sourceMappingURL=parseUrl.js.map

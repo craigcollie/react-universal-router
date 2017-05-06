@@ -8,8 +8,8 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn watch",
-    "bundle": "babel src --out-dir dist",
-    "watch": "babel src --out-dir dist --watch",
+    "watch": "babel src --out-dir dist --watch --source-maps",
+    "postinstall": "babel src --out-dir dist",
     "test": "yarn mocha && yarn eslint",
     "eslint": "eslint --quiet './src/**/*.js'",
     "mocha": "mocha --opts .mocharc 'src/**/*-spec.js'",
@@ -36,9 +36,9 @@
     "eslint-plugin-react": "^6.10.3",
     "jsdom": "9.12.0",
     "jsdom-global": "^2.1.1",
-    "lodash": "^4.17.4",
+    "lodash-es": "^4.17.4",
     "mocha": "^3.3.0",
-    "react": "^15.5.4",
+    "react": "15.4.2",
     "react-dom": "15.4.2",
     "sinon": "^2.1.0"
   }

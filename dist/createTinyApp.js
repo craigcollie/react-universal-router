@@ -22,3 +22,4 @@ function createTinyApp(RootComponent) {
 }
 
 exports.default = createTinyApp;
+//# sourceMappingURL=createTinyApp.js.map

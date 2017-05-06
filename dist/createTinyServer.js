@@ -6,17 +6,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _set = require('lodash/set');
+var _set = require('lodash-es/set');
 
 var _set2 = _interopRequireDefault(_set);
 
-var _forEach = require('lodash/forEach');
+var _forEach = require('lodash-es/forEach');
 
 var _forEach2 = _interopRequireDefault(_forEach);
-
-var _isEqual = require('lodash/isEqual');
-
-var _isEqual2 = _interopRequireDefault(_isEqual);
 
 var _server = require('react-dom/server');
 
@@ -64,7 +60,7 @@ function createTinyServer(_ref) {
     var currentRoute = (0, _matchRoute2.default)(routes, pathname);
 
     //  If no routes match, handoff to next middleware
-    if ((0, _isEqual2.default)(currentRoute, {})) {
+    if (JSON.stringify(currentRoute) === JSON.stringify({})) {
       return next();
     }
 
@@ -104,3 +100,4 @@ function createTinyServer(_ref) {
 }
 
 exports.default = createTinyServer;
+//# sourceMappingURL=createTinyServer.js.map

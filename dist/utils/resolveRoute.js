@@ -11,3 +11,4 @@ function resolveRoute(resolveFn, routeParams) {
 }
 
 exports.default = resolveRoute;
+//# sourceMappingURL=resolveRoute.js.map

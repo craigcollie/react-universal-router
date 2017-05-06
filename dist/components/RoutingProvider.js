@@ -10,10 +10,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = require('prop-types');
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
 var _parseUrl2 = require('./../utils/parseUrl');
 
 var _parseUrl3 = _interopRequireDefault(_parseUrl2);
@@ -160,22 +156,22 @@ var RoutingProvider = function (_Component) {
 }(_react.Component);
 
 RoutingProvider.propTypes = {
-  location: _propTypes2.default.shape({
-    pathname: _propTypes2.default.string.isRequired,
-    search: _propTypes2.default.string
+  location: _react.PropTypes.shape({
+    pathname: _react.PropTypes.string.isRequired,
+    search: _react.PropTypes.string
   }).isRequired,
-  routeMap: _propTypes2.default.shape({
-    path: _propTypes2.default.string,
-    component: _propTypes2.default.oneOfType([_propTypes2.default.node, _propTypes2.default.component]),
-    resolve: _propTypes2.default.func,
-    meta: _propTypes2.default.shape({
-      title: _propTypes2.default.string,
-      description: _propTypes2.default.string
+  routeMap: _react.PropTypes.shape({
+    path: _react.PropTypes.string,
+    component: _react.PropTypes.oneOfType([_react.PropTypes.node, _react.PropTypes.component]),
+    resolve: _react.PropTypes.func,
+    meta: _react.PropTypes.shape({
+      title: _react.PropTypes.string,
+      description: _react.PropTypes.string
     })
   }).isRequired,
-  routes: _propTypes2.default.oneOfType([_propTypes2.default.node, _propTypes2.default.func]).isRequired,
-  resolvedData: _propTypes2.default.oneOfType([_propTypes2.default.any]),
-  children: _propTypes2.default.oneOfType([_propTypes2.default.node, _propTypes2.default.element]).isRequired
+  routes: _react.PropTypes.oneOfType([_react.PropTypes.node, _react.PropTypes.func]).isRequired,
+  resolvedData: _react.PropTypes.oneOfType([_react.PropTypes.any]),
+  children: _react.PropTypes.oneOfType([_react.PropTypes.node, _react.PropTypes.element]).isRequired
 };
 
 RoutingProvider.defaultProps = {
@@ -183,10 +179,11 @@ RoutingProvider.defaultProps = {
 };
 
 RoutingProvider.childContextTypes = {
-  getLocation: _propTypes2.default.func,
-  getRoutes: _propTypes2.default.func,
-  getResolvedData: _propTypes2.default.func,
-  onRouteChange: _propTypes2.default.func
+  getLocation: _react.PropTypes.func,
+  getRoutes: _react.PropTypes.func,
+  getResolvedData: _react.PropTypes.func,
+  onRouteChange: _react.PropTypes.func
 };
 
 exports.default = RoutingProvider;
+//# sourceMappingURL=RoutingProvider.js.map

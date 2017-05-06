@@ -41,3 +41,4 @@ exports.RoutingProvider = _RoutingProvider3.default;
 
 exports.createTinyApp = _createTinyApp3.default;
 exports.createTinyServer = _createTinyServer3.default;
+//# sourceMappingURL=index.js.map

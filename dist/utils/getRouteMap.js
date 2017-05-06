@@ -41,3 +41,4 @@ function getRouteMap(routes) {
 }
 
 exports.default = getRouteMap;
+//# sourceMappingURL=getRouteMap.js.map

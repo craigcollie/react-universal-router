@@ -38,3 +38,4 @@ function matchRoute(routes, pathname) {
 }
 
 exports.default = matchRoute;
+//# sourceMappingURL=matchRoute.js.map

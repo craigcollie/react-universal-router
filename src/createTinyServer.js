@@ -1,8 +1,7 @@
 // @flow
 
-import set from 'lodash/set';
-import forEach from 'lodash/forEach';
-import isEqual from 'lodash/isEqual';
+import set from 'lodash-es/set';
+import forEach from 'lodash-es/forEach';
 import { renderToString } from 'react-dom/server';
 
 import resolveRoute from './utils/resolveRoute';
@@ -41,7 +40,7 @@ function createTinyServer({
     const currentRoute = matchRoute(routes, pathname);
 
     //  If no routes match, handoff to next middleware
-    if (isEqual(currentRoute, {})) {
+    if (JSON.stringify(currentRoute) === JSON.stringify({})) {
       return next();
     }
 

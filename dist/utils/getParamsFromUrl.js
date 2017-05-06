@@ -23,3 +23,4 @@ function getParamsFromUrl(userDefinedRoute, locationPathname) {
 }
 
 exports.default = getParamsFromUrl;
+//# sourceMappingURL=getParamsFromUrl.js.map
