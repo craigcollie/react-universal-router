@@ -113,11 +113,15 @@ RoutingProvider.propTypes = {
   ]).isRequired,
   resolvedData: PropTypes.oneOfType([
     PropTypes.any,
-  ]).isRequired,
+  ]),
   children: PropTypes.oneOfType([
     PropTypes.node,
     PropTypes.element,
   ]).isRequired,
+};
+
+RoutingProvider.defaultProps = {
+  resolvedData: {},
 };
 
 RoutingProvider.childContextTypes = {

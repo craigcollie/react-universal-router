@@ -174,8 +174,12 @@ RoutingProvider.propTypes = {
     })
   }).isRequired,
   routes: _propTypes2.default.oneOfType([_propTypes2.default.node, _propTypes2.default.func]).isRequired,
-  resolvedData: _propTypes2.default.oneOfType([_propTypes2.default.any]).isRequired,
+  resolvedData: _propTypes2.default.oneOfType([_propTypes2.default.any]),
   children: _propTypes2.default.oneOfType([_propTypes2.default.node, _propTypes2.default.element]).isRequired
+};
+
+RoutingProvider.defaultProps = {
+  resolvedData: {}
 };
 
 RoutingProvider.childContextTypes = {
