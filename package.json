@@ -14,7 +14,7 @@
     "eslint": "eslint --quiet './src/**/*.js'",
     "mocha": "mocha --opts .mocharc 'src/**/*-spec.js'",
     "mochaSingle": "mocha --opts .mocharc src/**/$test*-spec.js -w",
-    "bump": "npm version patch && npm publish"
+    "posttest": "npm version patch && npm publish"
   },
   "dependencies": {},
   "devDependencies": {

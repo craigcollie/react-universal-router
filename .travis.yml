@@ -13,5 +13,3 @@ cache:
   directories:
   - $HOME/.yarn-cache
   - node_modules
-after_success:
-  - yarn bump
