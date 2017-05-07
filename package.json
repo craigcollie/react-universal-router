@@ -1,6 +1,6 @@
 {
   "name": "tiny-universal",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "A universal router for isomorphic React applications",
   "main": "dist/tiny-universal.js",
   "repository": "git@github.com:craigcollie/react-universal-router.git",
