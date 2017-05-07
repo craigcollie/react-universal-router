@@ -1,9 +1,17 @@
+// @flow
 import React, { PropTypes } from 'react';
 
 import matchRoute from './../../utils/matchRoute';
 import getParamsFromUrl from './../../utils/getParamsFromUrl';
 
-const Router = (props, context) => {
+type Props = null;
+type Context = {
+  getLocation: Function,
+  getRoutes: Function,
+  getResolvedData: Function,
+};
+
+const Router = (props: Props, context: Context) => {
   const {
     getLocation,
     getRoutes,
