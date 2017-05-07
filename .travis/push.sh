@@ -12,7 +12,7 @@ commit_website_files() {
 }
 
 upload_files() {
-  git remote add origin https://1457abec2e59d60904fdc06857c73dadbb11a971@github.com/MVSE-outreach/resources.git > /dev/null 2>&1
+  git remote add origin https://1457abec2e59d60904fdc06857c73dadbb11a971@github.com/craigcollie/tiny-universal.git > /dev/null 2>&1
   git push --quiet --set-upstream origin deploy
 }
 
