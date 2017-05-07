@@ -3,7 +3,8 @@ A universal router for React.
 
 ### Requirements
 * React
-* Express (support for Koa on the way)
+* React-dom
+* Express (Or Koa)
 
 ### Getting started
 From inside your project, install package:
@@ -129,25 +130,20 @@ app.use(tinyServer);
 app.listen(8080);
 ```
 
-### Index.ejs
-Still a WIP. For now, bundles can't be hashed (not yet, anyway), and webpack-dev-server
-must be running and serving bundle files (the location is up to you).
-```ejs
+### Index.html
+Your index file is served statically through Tiny Universal, and requires one small token to be added `<% appRoot %>`. This token will be replaced by your applications base component and provides the connection between the initial route props and the client-side application.
+
+You can also use custom tokens with your template, provided you supply the data with the routes. I.e. in the template below, you can see a few metadata tags `<% meta.title %> <% meta.description %>`, which are supplied with data that is provided by the route definitions. 
+```html
 <!doctype html>
 <html lang="en">
-<title><%- title %></title>
-<meta name="description" content="<%- description %>" />
+<title><% meta.title %></title>
+<meta name="description" content="<% meta.description %>" />
 </head>
 <body>
-<div id="root"><%- appRoot %></div>
-<script src="/vendor.bundle.js"></script>
-<script src="/main.bundle.js"></script>
+<div id="root"><% appRoot %></div>
+<hr/>
+<script src="/bundle.js"></script>
 </body>
 </html>
 ```
-
-### That's it!
-Yes and no. More documentation to follow, along with added the following features:
-* Bundle hashing
-* Additional route guarding (not just `resolve`)
-* Ensuring CSS-Modules work with this router
