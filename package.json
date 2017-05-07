@@ -13,7 +13,7 @@
     "eslint": "eslint --quiet './src/**/*.js'",
     "mocha": "mocha --opts .mocharc 'src/**/*-spec.js'",
     "mochaSingle": "mocha --opts .mocharc src/**/$test*-spec.js -w",
-    "bump": "npm version patch && npm publish",
+    "bump": "npm version patch && yarn publish",
     "bundle": "rm -rf dist && mkdir dist && yarn package && yarn bump",
     "package": "node -r babel-register node_modules/.bin/webpack -p --config=./webpack.config"
   },
