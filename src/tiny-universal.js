@@ -1,8 +1,8 @@
 //  Components
-export Router from './components/Router';
-export Route from './components/Route';
-export Link from './components/Link';
-export RoutingProvider from './components/RoutingProvider';
+export Router from './components/Router/Router';
+export Route from './components/Route/Route';
+export Link from './components/Link/Link';
+export RoutingProvider from './components/RoutingProvider/RoutingProvider';
 
 //  Middleware
 export createTinyApp from './createTinyApp';

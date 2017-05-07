@@ -1,9 +1,9 @@
 import React, { PropTypes, Component } from 'react';
 
-import resolveRoute from './../utils/resolveRoute';
-import parseUrl from './../utils/parseUrl';
-import matchRoute from './../utils/matchRoute';
-import getParamsFromUrl from './../utils/getParamsFromUrl';
+import resolveRoute from './../../utils/resolveRoute';
+import parseUrl from './../../utils/parseUrl';
+import matchRoute from './../../utils/matchRoute';
+import getParamsFromUrl from './../../utils/getParamsFromUrl';
 
 class RoutingProvider extends Component {
   constructor(props) {

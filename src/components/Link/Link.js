@@ -6,24 +6,26 @@ const handleClick = (event, onRouteChange, to) => {
 };
 
 function Link(props, context) {
-  const { to, text } = props;
+  const { to, text, children } = props;
   const { onRouteChange } = context;
 
   return (
     <a
       href={to}
-      onClick={event =>
-        (handleClick(event, onRouteChange, to))
-      }
+      onClick={event => (handleClick(event, onRouteChange, to))}
     >
-      {text}
+      {children || text}
     </a>
   );
 }
 
 Link.propTypes = {
   to: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
+  text: PropTypes.string,
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.element,
+  ]),
 };
 
 Link.contextTypes = {
