@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { childrenShape } from './../../propTypes/propTypes';
 
 const handleClick = (event, onRouteChange, to) => {
   event.preventDefault();
@@ -22,10 +23,7 @@ function Link(props, context) {
 Link.propTypes = {
   to: PropTypes.string.isRequired,
   text: PropTypes.string,
-  children: PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.element,
-  ]),
+  children: childrenShape,
 };
 
 Link.contextTypes = {

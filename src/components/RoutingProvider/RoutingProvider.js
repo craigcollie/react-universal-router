@@ -1,5 +1,13 @@
 import React, { PropTypes, Component } from 'react';
 
+import {
+  locationShape,
+  routeMapShape,
+  routeShape,
+  resolvedDataShape,
+  childrenShape,
+} from './../../propTypes/propTypes';
+
 import resolveRoute from './../../utils/resolveRoute';
 import parseUrl from './../../utils/parseUrl';
 import matchRoute from './../../utils/matchRoute';
@@ -91,37 +99,11 @@ class RoutingProvider extends Component {
 }
 
 RoutingProvider.propTypes = {
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-    search: PropTypes.string,
-  }).isRequired,
-  routeMap: PropTypes.shape({
-    path: PropTypes.string,
-    component: PropTypes.oneOfType([
-      PropTypes.node,
-      PropTypes.component,
-    ]),
-    resolve: PropTypes.func,
-    meta: PropTypes.shape({
-      title: PropTypes.string,
-      description: PropTypes.string,
-    }),
-  }).isRequired,
-  routes: PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.func,
-  ]).isRequired,
-  resolvedData: PropTypes.oneOfType([
-    PropTypes.any,
-  ]),
-  children: PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.element,
-  ]).isRequired,
-};
-
-RoutingProvider.defaultProps = {
-  resolvedData: {},
+  location: locationShape.isRequired,
+  routeMap: routeMapShape.isRequired,
+  routes: routeShape.isRequired,
+  resolvedData: resolvedDataShape,
+  children: childrenShape.isRequired,
 };
 
 RoutingProvider.childContextTypes = {

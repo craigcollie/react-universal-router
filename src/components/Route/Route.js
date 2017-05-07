@@ -1,4 +1,6 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+
+import { componentShape } from './../../propTypes/propTypes';
 
 const Route = (props) => {
   const { component: ComponentView } = props;
@@ -8,10 +10,7 @@ const Route = (props) => {
 };
 
 Route.propTypes = {
-  component: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.node,
-  ]).isRequired,
+  component: componentShape.isRequired,
 };
 
 export default Route;
