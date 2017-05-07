@@ -15,4 +15,4 @@ cache:
   - node_modules
 after_success:
   - yarn bundle
-  - .travis/push.sh
+  - ./travis/push.sh
