@@ -1,3 +1,4 @@
+// @flow
 import React, { PropTypes } from 'react';
 import { childrenShape } from './../../propTypes/propTypes';
 
@@ -6,7 +7,13 @@ const handleClick = (event, onRouteChange, to) => {
   onRouteChange(to);
 };
 
-function Link(props, context) {
+type Props = { to: string, text: string, children: mixed };
+type Context = { onRouteChange: Function };
+
+function Link(
+  props: Props,
+  context: Context,
+) {
   const { to, text, children } = props;
   const { onRouteChange } = context;
 
