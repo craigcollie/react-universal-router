@@ -14,7 +14,7 @@ Bar.displayName = 'Bar';
 const Wee = () => (<div>Wee</div>);
 Wee.displayName = 'Wee';
 
-const routeConfig = () => (
+const multipleRoutes = () => (
   <div>
     <Route path="/foo" component={Foo} />
     <Route path="/bar/:someId" component={Bar} />
@@ -22,18 +22,22 @@ const routeConfig = () => (
   </div>
 );
 
+const singleRoute = () => (
+  <Route path="/foo" component={Foo} />
+);
+
 describe('Component: Router', () => {
   const tests = [
     {
       location: { pathname: '/foo' },
-      routes: routeConfig,
+      routes: multipleRoutes,
       resolvedData: {},
       routeParams: {},
       result: Foo,
     },
     {
       location: { pathname: '/bar/123' },
-      routes: routeConfig,
+      routes: multipleRoutes,
       resolvedData: {},
       routeParams: {
         someId: '123',
@@ -42,10 +46,17 @@ describe('Component: Router', () => {
     },
     {
       location: { pathname: '/wee', search: 'foo=bar' },
-      routes: routeConfig,
+      routes: multipleRoutes,
       resolvedData: {},
       routeParams: {},
       result: Wee,
+    },
+    {
+      location: { pathname: '/foo' },
+      routes: singleRoute,
+      resolvedData: {},
+      routeParams: {},
+      result: Foo,
     },
   ];
 
