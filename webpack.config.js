@@ -4,25 +4,25 @@ import nodeExternals from 'webpack-node-externals';
 const env = process.env.NODE_ENV;
 
 export default {
-  entry: './src/index.js',
+  entry: './src/tiny-universal.js',
+
   output: {
-    filename: `tiny-universal${(env === 'production') ? 'min' : ''}.js`,
-    path: path.resolve(__dirname, 'dist'),
+    library: 'tiny-universal',
     libraryTarget: 'umd',
-    library: 'TinyUniversal',
   },
-  target: 'node',
-  externals: [
-    nodeExternals(),
-  ],
-  devtool: 'cheap-eval-source-map',
+
+  externals: {
+    react: {
+      root: 'React',
+      commonjs2: 'react',
+      commonjs: 'react',
+      amd: 'react',
+    },
+  },
+
   module: {
     rules: [
-      {
-        test: /\.js?$/,
-        exclude: /node_modules/,
-        use: ['babel-loader'],
-      },
+      { test: /\.js?$/, exclude: /node_modules/, loader: 'babel-loader' },
     ],
   },
 };

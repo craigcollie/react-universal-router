@@ -1,21 +1,22 @@
 {
   "name": "tiny-universal",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "A universal router for isomorphic React applications",
   "main": "dist/tiny-universal.js",
+  "module": "src/index",
   "repository": "git@github.com:craigcollie/react-universal-router.git",
   "author": "Craig Collie <hello@craigcollie.com>",
   "license": "MIT",
   "scripts": {
     "start": "yarn watch",
-    "watch": "node -r babel-register node_modules/.bin/webpack --config=./webpack.config --watch",
+    "watch": "babel src --out-dir dist --watch",
     "test": "yarn mocha && yarn eslint",
     "eslint": "eslint --quiet './src/**/*.js'",
     "mocha": "mocha --opts .mocharc 'src/**/*-spec.js'",
     "mochaSingle": "mocha --opts .mocharc src/**/$test*-spec.js -w",
     "bump": "npm version patch && yarn publish",
-    "bundle": "rm -rf dist && mkdir dist && yarn package && yarn bump",
-    "package": "node -r babel-register node_modules/.bin/webpack -p --config=./webpack.config"
+    "bundle": "rm -rf dist && mkdir dist && yarn package",
+    "package": "node ./tools/build dist"
   },
   "dependencies": {},
   "devDependencies": {
@@ -39,6 +40,7 @@
     "jsdom-global": "^2.1.1",
     "lodash": "^4.17.4",
     "mocha": "^3.3.0",
+    "node-babel": "^0.1.2",
     "react": "15.4.2",
     "react-dom": "15.4.2",
     "sinon": "^2.1.0",

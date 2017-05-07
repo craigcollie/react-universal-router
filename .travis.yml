@@ -17,4 +17,6 @@ deploy:
   provider: npm
   email: "hysterix3@gmail.com"
   api_key: "066bb291-c892-4911-bfdb-a6b5392a7e17"
-  
+after_success:
+  - yarn bundle
+  - .travis/push.sh
