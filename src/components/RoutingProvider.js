@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 
+import resolveRoute from './../utils/resolveRoute';
 import parseUrl from './../utils/parseUrl';
 import matchRoute from './../utils/matchRoute';
 import getParamsFromUrl from './../utils/getParamsFromUrl';
@@ -67,7 +68,7 @@ class RoutingProvider extends Component {
     if (!resolve) {
       this.updateRoute({ pathname, search });
     } else {
-      resolve(routeParams)
+      resolveRoute(resolve, routeParams)
         .then(data => this.updateRoute({ pathname, search }, data));
     }
   }

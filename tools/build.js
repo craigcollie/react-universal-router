@@ -7,8 +7,12 @@ const exec = (command, extraEnv) => (
   })
 );
 
+const entry = 'tiny-universal.js';
+const output = 'tiny-universal.min.js';
+
 const build = {
-  dist: () => (exec('webpack -p src/tiny-universal.js dist/tiny-universal.js', { NODE_ENV: 'production' })),
+  dev: () => (exec(`webpack src/${entry} dist/${output} --watch`, { NODE_ENV: 'dev' })),
+  dist: () => (exec(`webpack -p src/${entry} dist/${output}`, { NODE_ENV: 'production' })),
   default: () => console.log('No command found'),
 };
 
