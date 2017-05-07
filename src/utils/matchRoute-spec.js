@@ -2,7 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 
 import matchRoute from './matchRoute';
-import Route from './../components/Route';
+import Route from './../components/Route/Route';
 
 const Test = () => (<div />);
 

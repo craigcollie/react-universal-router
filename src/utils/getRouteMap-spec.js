@@ -1,7 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import Route from './../components/Route';
+import Route from './../components/Route/Route';
 import getRouteMap from './getRouteMap';
 
 const TestComponent = () => (<div />);
