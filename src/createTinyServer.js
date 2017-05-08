@@ -1,8 +1,10 @@
 // @flow
+import React from 'react';
 import set from 'lodash/set';
 import forEach from 'lodash/forEach';
 import { renderToString } from 'react-dom/server';
 
+import RouteProvider from './components/RouteProvider/RouteProvider';
 import resolveRoute from './utils/resolveRoute';
 import parseUrl from './utils/parseUrl';
 import matchRoute from './utils/matchRoute';
@@ -12,31 +14,39 @@ import getRouteMap from './utils/getRouteMap';
 
 import type { RouteNodes } from './types/Route';
 
-function generateServerProps(props, root) {
+function createAppRoot(RootComponent, routes, props) {
   const dataProps = JSON.stringify(props);
+
+  const testRoot = serverProps => (
+    <RouteProvider {...serverProps} routes={routes}>
+      <RootComponent />
+    </RouteProvider>
+  );
+
   return `
       <script id='app-props' type='application/json'>
         <![CDATA[${dataProps}]]>
       </script>
-      <div>${renderToString(root(props))}</div>
+      <div>${renderToString(testRoot(props))}</div>
     `;
 }
 
-type TinyServer = {
-  clientApp: Function,
-  routes: RouteNodes,
-  template: string,
-};
+type Req = { url: string };
+type Res = { send: Function };
 
-function createTinyServer({
-  clientApp,
-  routes,
-  template,
-}: TinyServer) {
-  return function (req, res, next) {
+function createTinyServer(
+  RootComponent: Function,
+  Routes: RouteNodes,
+  template: string,
+) {
+  return function (
+    req: Req,
+    res: Res,
+    next: Function,
+  ) {
     const { pathname, search } = parseUrl(req.url);
 
-    const currentRoute = matchRoute(routes, pathname);
+    const currentRoute = matchRoute(Routes, pathname);
 
     //  If no routes match, handoff to next middleware
     if (JSON.stringify(currentRoute) === JSON.stringify({})) {
@@ -47,7 +57,7 @@ function createTinyServer({
 
     //  Convert URL to params
     const routeParams = getParamsFromUrl(path, pathname);
-    const routeMap = getRouteMap(routes);
+    const routeMap = getRouteMap(Routes);
 
     resolveRoute(resolve, routeParams)
       .then((resolvedData) => {
@@ -62,18 +72,20 @@ function createTinyServer({
           templateString = templateString.replace(`<% ${key} %>`, val);
         });
 
-        const props = {
-          location: { pathname, search },
-          resolvedData,
-          routeMap,
-          ...tokenProps,
-        };
-
-        //  Populate the appRoot with the
-        //  injected server-side props
+        //  Replace <% appRoot %> with the wrapped
+        //  <RouteProvider /> wrapped root component
         templateString = templateString.replace(
-          '<% appRoot %>', generateServerProps(props, clientApp),
-        );
+          '<% appRoot %>',
+          createAppRoot(RootComponent, Routes, {
+            location: {
+              pathname,
+              search,
+            },
+            resolvedData,
+            routeMap,
+            ...tokenProps,
+          },
+        ));
 
         res.send(templateString);
       });
