@@ -1,10 +1,8 @@
 // @flow
-import React from 'react';
 import set from 'lodash/set';
 import forEach from 'lodash/forEach';
-import { renderToString } from 'react-dom/server';
 
-import RouteProvider from './components/RouteProvider/RouteProvider';
+import { wrapServerApp } from './createUniversalWrappers';
 import resolveRoute from './utils/resolveRoute';
 import parseUrl from './utils/parseUrl';
 import matchRoute from './utils/matchRoute';
@@ -13,23 +11,6 @@ import getParamsFromUrl from './utils/getParamsFromUrl';
 import getRouteMap from './utils/getRouteMap';
 
 import type { RouteNodes } from './types/Route';
-
-function createAppRoot(RootComponent, routes, props) {
-  const dataProps = JSON.stringify(props);
-
-  const testRoot = serverProps => (
-    <RouteProvider {...serverProps} routes={routes}>
-      <RootComponent />
-    </RouteProvider>
-  );
-
-  return `
-      <script id='app-props' type='application/json'>
-        <![CDATA[${dataProps}]]>
-      </script>
-      <div>${renderToString(testRoot(props))}</div>
-    `;
-}
 
 type Req = { url: string };
 type Res = { send: Function };
@@ -76,7 +57,7 @@ function createTinyServer(
         //  <RouteProvider /> wrapped root component
         templateString = templateString.replace(
           '<% appRoot %>',
-          createAppRoot(RootComponent, Routes, {
+          wrapServerApp(RootComponent, Routes, {
             location: {
               pathname,
               search,
