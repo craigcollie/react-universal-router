@@ -1,8 +1,4 @@
 // @flow
-import { wrapClientApp } from './createUniversalWrappers';
+import { wrapClientApp } from './universalWrappers';
 
-function createTinyApp(RootComponent, Routes) {
-  return wrapClientApp(RootComponent, Routes);
-}
-
-export default createTinyApp;
+export default wrapClientApp;

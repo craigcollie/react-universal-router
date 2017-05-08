@@ -14,9 +14,7 @@ export const wrapServerApp = (RootComponent, routes, props) => {
   );
 
   return `
-      <script id='app-props' type='application/json'>
-        <![CDATA[${dataProps}]]>
-      </script>
+      <script id='app-props' type='application/json'><![CDATA[${dataProps}]]></script>
       <div>${renderToString(wrappedRoot(props))}</div>
     `;
 };

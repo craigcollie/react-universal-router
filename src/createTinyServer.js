@@ -2,7 +2,7 @@
 import set from 'lodash/set';
 import forEach from 'lodash/forEach';
 
-import { wrapServerApp } from './createUniversalWrappers';
+import { wrapServerApp } from './universalWrappers';
 import resolveRoute from './utils/resolveRoute';
 import parseUrl from './utils/parseUrl';
 import matchRoute from './utils/matchRoute';
