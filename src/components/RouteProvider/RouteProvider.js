@@ -17,20 +17,14 @@ class RoutingProvider extends Component {
   constructor(props) {
     super(props);
 
-    const {
-      location,
-      routeMap,
-      routes,
-      resolvedData = {},
-    } = props;
+    const { location, routeMap, routes, resolvedData } = props;
+    const { pathname } = location;
 
     this.state = {
       location,
       routeMap,
       routes,
-      data: {
-        [location.pathname]: resolvedData,
-      },
+      data: { [pathname]: resolvedData },
     };
 
     this.onRouteChange = this.onRouteChange.bind(this);
@@ -55,7 +49,8 @@ class RoutingProvider extends Component {
   }
 
   onRouteChange(locationString, isHistoryEvent) {
-    const { pathname, search } = parseUrl(locationString);
+    const location = parseUrl(locationString);
+    const { pathname } = location;
     const { routes } = this.state;
     const route = matchRoute(routes, pathname);
 
@@ -63,22 +58,24 @@ class RoutingProvider extends Component {
       throw new Error(`${pathname} has no valid route`);
     }
 
-    const { resolve } = route;
-
     //  Add route change to window history
     if (!isHistoryEvent) {
       history.pushState({ page: locationString }, locationString, locationString);
     }
 
-    //  Resolve route data and setState()
-    const routeParams = getParamsFromUrl(route.path, pathname);
+    const { resolve, path } = route;
+    const routeParams = getParamsFromUrl(path, pathname);
 
-    if (!resolve) {
-      this.updateRoute({ pathname, search });
-    } else {
-      resolveRoute(resolve, routeParams)
-        .then(data => this.updateRoute({ pathname, search }, data));
-    }
+    resolveRoute(resolve, routeParams)
+      .then(
+        (data) => {
+          this.updateRoute(location, data);
+        },
+        (err) => {
+          this.updateRoute(location);
+          throw new Error(err);
+        },
+      );
   }
 
   updateRoute(location, resolvedData) {
@@ -87,7 +84,9 @@ class RoutingProvider extends Component {
 
     this.setState({
       location,
-      data: { [pathname]: (resolvedData || data[pathname]) },
+      data: {
+        [pathname]: (resolvedData || data[pathname]),
+      },
     });
   }
 

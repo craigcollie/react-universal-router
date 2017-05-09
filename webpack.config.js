@@ -1,7 +1,7 @@
 import nodeExternals from 'webpack-node-externals';
 
 export default {
-  entry: './src/tiny-universal.js',
+  entry: './src/index.js',
 
   output: {
     library: 'tiny-universal',

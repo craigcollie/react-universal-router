@@ -1,82 +1,43 @@
-// @flow
-import set from 'lodash/set';
-import forEach from 'lodash/forEach';
-import { renderToString } from 'react-dom/server';
+import curry from 'lodash/curry';
 
+import { serverWrapper } from './universalWrappers';
 import resolveRoute from './utils/resolveRoute';
 import parseUrl from './utils/parseUrl';
 import matchRoute from './utils/matchRoute';
-import getTemplateTokens from './utils/getTemplateTokens';
 import getParamsFromUrl from './utils/getParamsFromUrl';
 import getRouteMap from './utils/getRouteMap';
+import hasMatchingRoute from './utils/hasMatchingRoute';
+import parseTemplate from './utils/parseTemplate';
 
-import type { RouteNodes } from './types/Route';
+const handleSuccess = (res, response) => (res.send(response));
+const handleError = (res, error) => (res.status(500).send(error));
 
-function generateServerProps(props, root) {
-  const dataProps = JSON.stringify(props);
-  return `
-      <script id='app-props' type='application/json'>
-        <![CDATA[${dataProps}]]>
-      </script>
-      <div>${renderToString(root(props))}</div>
-    `;
-}
+function createTinyServer(RootComponent, Routes, template) {
+  return function (req, res, next) { // eslint-disable-line
 
-type TinyServer = {
-  clientApp: Function,
-  routes: RouteNodes,
-  template: string,
-};
+    const successHandler = curry(handleSuccess)(res);
+    const errorHandler = curry(handleError)(res);
 
-function createTinyServer({
-  clientApp,
-  routes,
-  template,
-}: TinyServer) {
-  return function (req, res, next) {
     const { pathname, search } = parseUrl(req.url);
+    const currentRoute = matchRoute(Routes, pathname);
 
-    const currentRoute = matchRoute(routes, pathname);
-
-    //  If no routes match, handoff to next middleware
-    if (JSON.stringify(currentRoute) === JSON.stringify({})) {
-      return next();
-    }
+    if (!hasMatchingRoute(currentRoute)) return next();
 
     const { path, resolve } = currentRoute;
-
-    //  Convert URL to params
     const routeParams = getParamsFromUrl(path, pathname);
-    const routeMap = getRouteMap(routes);
+    const routeMap = getRouteMap(Routes);
 
     resolveRoute(resolve, routeParams)
       .then((resolvedData) => {
-        let templateString = template.toString();
-        const templateTokens = getTemplateTokens(templateString, currentRoute);
-
-        //  Populate the token and apply any
-        const tokenProps = {};
-
-        forEach(templateTokens, (val, key) => {
-          set(tokenProps, key, val);
-          templateString = templateString.replace(`<% ${key} %>`, val);
-        });
-
-        const props = {
+        const appRoot = serverWrapper(RootComponent, Routes, {
           location: { pathname, search },
           resolvedData,
           routeMap,
-          ...tokenProps,
-        };
+        });
+        const response = parseTemplate(template.toString(), currentRoute, appRoot);
 
-        //  Populate the appRoot with the
-        //  injected server-side props
-        templateString = templateString.replace(
-          '<% appRoot %>', generateServerProps(props, clientApp),
-        );
-
-        res.send(templateString);
-      });
+        successHandler(response);
+      }, errorHandler);
   };
 }
 
