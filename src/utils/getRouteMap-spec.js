@@ -17,7 +17,7 @@ describe('Utils: createRouteMapping', () => {
         </div>
       ),
       result: {
-        root: {
+        '/': {
           component: TestComponent,
           meta: undefined,
           path: '/',
