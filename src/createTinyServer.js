@@ -1,14 +1,14 @@
 // @flow
-import set from 'lodash/set';
-import forEach from 'lodash/forEach';
-
-import { wrapServerApp } from './universalWrappers';
+import { serverWrapper } from './universalWrappers';
 import resolveRoute from './utils/resolveRoute';
 import parseUrl from './utils/parseUrl';
 import matchRoute from './utils/matchRoute';
 import getTemplateTokens from './utils/getTemplateTokens';
 import getParamsFromUrl from './utils/getParamsFromUrl';
 import getRouteMap from './utils/getRouteMap';
+import hasMatchingRoute from './utils/hasMatchingRoute';
+import getTokenProps from './utils/getTokenProps';
+import parseTemplate from './utils/parseTemplate';
 
 import type { RouteNodes } from './types/Route';
 
@@ -26,13 +26,9 @@ function createTinyServer(
     next: Function,
   ) {
     const { pathname, search } = parseUrl(req.url);
-
     const currentRoute = matchRoute(Routes, pathname);
 
-    //  If no routes match, handoff to next middleware
-    if (JSON.stringify(currentRoute) === JSON.stringify({})) {
-      return next();
-    }
+    if (!hasMatchingRoute(currentRoute)) return next();
 
     const { path, resolve } = currentRoute;
 
@@ -42,33 +38,21 @@ function createTinyServer(
 
     resolveRoute(resolve, routeParams)
       .then((resolvedData) => {
-        let templateString = template.toString();
-        const templateTokens = getTemplateTokens(templateString, currentRoute);
+        const templateString = template.toString();
+        const tokens = getTemplateTokens(templateString, currentRoute);
+        const tokenProps = getTokenProps(tokens);
 
-        //  Populate the token and apply any
-        const tokenProps = {};
-
-        forEach(templateTokens, (val, key) => {
-          set(tokenProps, key, val);
-          templateString = templateString.replace(`<% ${key} %>`, val);
+        const appRoot = serverWrapper(RootComponent, Routes, {
+          location: {
+            pathname,
+            search,
+          },
+          resolvedData,
+          routeMap,
+          ...tokenProps,
         });
 
-        //  Replace <% appRoot %> with the wrapped
-        //  <RouteProvider /> wrapped root component
-        templateString = templateString.replace(
-          '<% appRoot %>',
-          wrapServerApp(RootComponent, Routes, {
-            location: {
-              pathname,
-              search,
-            },
-            resolvedData,
-            routeMap,
-            ...tokenProps,
-          },
-        ));
-
-        res.send(templateString);
+        res.send(parseTemplate(templateString, tokens, appRoot));
       });
   };
 }

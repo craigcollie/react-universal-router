@@ -1,4 +1,4 @@
 // @flow
-import { wrapClientApp } from './universalWrappers';
+import { clientWrapper } from './universalWrappers';
 
-export default wrapClientApp;
+export default clientWrapper;
