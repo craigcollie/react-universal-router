@@ -7,7 +7,7 @@ const exec = (command, extraEnv) => (
   })
 );
 
-const entry = 'tiny-universal.js';
+const entry = 'index.js';
 const output = 'tiny-universal.min.js';
 
 const build = {

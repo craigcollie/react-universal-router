@@ -1,6 +1,11 @@
 import forEach from 'lodash/forEach';
 
-function parseTemplate(templateString, tokens, appRoot) {
+import getTemplateTokens from './getTemplateTokens';
+
+function parseTemplate(templateString, currentRoute, appRoot) {
+  //  TODO - refactor this
+  const tokens = getTemplateTokens(templateString, currentRoute);
+
   let tmp = templateString;
 
   if (!tmp.match('<% appRoot %>')) return null;

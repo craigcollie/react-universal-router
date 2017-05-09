@@ -1,59 +1,43 @@
-// @flow
+import curry from 'lodash/curry';
+
 import { serverWrapper } from './universalWrappers';
 import resolveRoute from './utils/resolveRoute';
 import parseUrl from './utils/parseUrl';
 import matchRoute from './utils/matchRoute';
-import getTemplateTokens from './utils/getTemplateTokens';
 import getParamsFromUrl from './utils/getParamsFromUrl';
 import getRouteMap from './utils/getRouteMap';
 import hasMatchingRoute from './utils/hasMatchingRoute';
-import getTokenProps from './utils/getTokenProps';
 import parseTemplate from './utils/parseTemplate';
 
-import type { RouteNodes } from './types/Route';
+const handleSuccess = (res, response) => (res.send(response));
+const handleError = (res, error) => (res.status(500).send(error));
 
-type Req = { url: string };
-type Res = { send: Function };
+function createTinyServer(RootComponent, Routes, template) {
+  return function (req, res, next) { // eslint-disable-line
 
-function createTinyServer(
-  RootComponent: Function,
-  Routes: RouteNodes,
-  template: string,
-) {
-  return function (
-    req: Req,
-    res: Res,
-    next: Function,
-  ) {
+    const successHandler = curry(handleSuccess)(res);
+    const errorHandler = curry(handleError)(res);
+
     const { pathname, search } = parseUrl(req.url);
     const currentRoute = matchRoute(Routes, pathname);
 
     if (!hasMatchingRoute(currentRoute)) return next();
 
     const { path, resolve } = currentRoute;
-
-    //  Convert URL to params
     const routeParams = getParamsFromUrl(path, pathname);
     const routeMap = getRouteMap(Routes);
 
     resolveRoute(resolve, routeParams)
       .then((resolvedData) => {
-        const templateString = template.toString();
-        const tokens = getTemplateTokens(templateString, currentRoute);
-        const tokenProps = getTokenProps(tokens);
-
         const appRoot = serverWrapper(RootComponent, Routes, {
-          location: {
-            pathname,
-            search,
-          },
+          location: { pathname, search },
           resolvedData,
           routeMap,
-          ...tokenProps,
         });
+        const response = parseTemplate(template.toString(), currentRoute, appRoot);
 
-        res.send(parseTemplate(templateString, tokens, appRoot));
-      });
+        successHandler(response);
+      }, errorHandler);
   };
 }
 
