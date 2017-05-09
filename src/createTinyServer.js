@@ -9,8 +9,13 @@ import getRouteMap from './utils/getRouteMap';
 import hasMatchingRoute from './utils/hasMatchingRoute';
 import parseTemplate from './utils/parseTemplate';
 
-const handleSuccess = (res, response) => (res.send(response));
-const handleError = (res, error) => (res.status(500).send(error));
+const handleSuccess = (res, response) => (
+  res.send(response)
+);
+
+const handleError = (res, error) => (
+  res.status(500).send(error)
+);
 
 function createTinyServer(RootComponent, Routes, template) {
   return function (req, res, next) { // eslint-disable-line
