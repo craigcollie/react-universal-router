@@ -17,11 +17,10 @@ const handleError = (res, error) => (
   res.status(500).send(error)
 );
 
-function createTinyServer({
-  rootComponent,
-  routes,
-  template,
-  }) {
+function createTinyServer(config) {
+  const { entry, ...restConfig } = config;
+  const { rootComponent, routes, template } = entry;
+
   return function (req, res, next) { // eslint-disable-line
 
     const successHandler = curry(handleSuccess)(res);
@@ -45,7 +44,8 @@ function createTinyServer({
             location: { pathname, search },
             resolvedData,
             routeMap,
-          }
+            ...restConfig, // Append lifecycle methods to props
+          },
         );
 
         const response = parseTemplate(template, currentRoute, appRoot);

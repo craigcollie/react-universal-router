@@ -8,10 +8,12 @@ import {
   childrenShape,
 } from './../../propTypes/propTypes';
 
+import getString from './../../lang/getString';
 import resolveRoute from './../../utils/resolveRoute';
 import parseUrl from './../../utils/parseUrl';
 import matchRoute from './../../utils/matchRoute';
 import getParamsFromUrl from './../../utils/getParamsFromUrl';
+import hasMatchingRoute from './../../utils/hasMatchingRoute';
 
 class RoutingProvider extends Component {
   constructor(props) {
@@ -54,8 +56,8 @@ class RoutingProvider extends Component {
     const { routes } = this.state;
     const route = matchRoute(routes, pathname);
 
-    if (!route) {
-      throw new Error(`${pathname} has no valid route`);
+    if (!hasMatchingRoute(route)) {
+      throw new Error(getString('route.invalid', pathname));
     }
 
     //  Add route change to window history
@@ -68,8 +70,8 @@ class RoutingProvider extends Component {
 
     resolveRoute(resolve, routeParams)
       .then(
-        (data) => {
-          this.updateRoute(location, data);
+        (resolvedData) => {
+          this.updateRoute(location, resolvedData);
         },
         (err) => {
           this.updateRoute(location);
@@ -81,13 +83,12 @@ class RoutingProvider extends Component {
   updateRoute(location, resolvedData) {
     const { data } = this.state;
     const { pathname } = location;
+    const { afterRouteChange } = this.props;
 
     this.setState({
       location,
-      data: {
-        [pathname]: (resolvedData || data[pathname]),
-      },
-    });
+      data: { [pathname]: (resolvedData || data[pathname]) },
+    }, afterRouteChange);
   }
 
   render() {
@@ -103,6 +104,7 @@ RoutingProvider.propTypes = {
   routes: routeShape.isRequired,
   resolvedData: resolvedDataShape,
   children: childrenShape.isRequired,
+  afterRouteChange: PropTypes.func,
 };
 
 RoutingProvider.childContextTypes = {

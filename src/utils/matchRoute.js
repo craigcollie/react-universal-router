@@ -4,7 +4,9 @@ import type { RouteNodes } from './../types/Route';
 function isMatchingPathname(path: string, pathname: string): boolean {
   //  Try to extract /:foo/:bar from route path
   const routeParams = path.match(/:+(.+)$/i);
-  if (!routeParams) return false;
+  if (!routeParams) {
+    return false;
+  }
 
   const pathnameParts = pathname.split('/');
   const constructedPathname = path.split('/')

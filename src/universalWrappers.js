@@ -23,15 +23,19 @@ export const serverWrapper = (RootComponent, routes, props) => {
 
 //  Unwraps the server-side root component
 //  and injects serverProps
-export const clientWrapper = ({
-  rootComponent: RootComponent,
-  routes,
-}) => {
+export const clientWrapper = (config) => {
+  const { entry, ...restConfig } = config;
+  const { rootComponent: RootComponent, routes } = entry;
+
   let props = document.getElementById('app-props').textContent;
   props = props.replace("<![CDATA[", "").replace("]]>", ""); // eslint-disable-line
+  const clientProps = {
+    ...JSON.parse(props),
+    ...restConfig,
+  };
 
   return (
-    <RouteProvider {...JSON.parse(props)} routes={routes}>
+    <RouteProvider {...clientProps} routes={routes}>
       <RootComponent />
     </RouteProvider>
   );
