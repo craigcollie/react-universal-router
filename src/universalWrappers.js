@@ -23,7 +23,10 @@ export const serverWrapper = (RootComponent, routes, props) => {
 
 //  Unwraps the server-side root component
 //  and injects serverProps
-export const clientWrapper = (RootComponent, routes) => {
+export const clientWrapper = ({
+  rootComponent: RootComponent,
+  routes,
+}) => {
   let props = document.getElementById('app-props').textContent;
   props = props.replace("<![CDATA[", "").replace("]]>", ""); // eslint-disable-line
 

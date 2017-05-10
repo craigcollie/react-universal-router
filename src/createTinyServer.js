@@ -17,30 +17,38 @@ const handleError = (res, error) => (
   res.status(500).send(error)
 );
 
-function createTinyServer(RootComponent, Routes, template) {
+function createTinyServer({
+  rootComponent,
+  routes,
+  template,
+  }) {
   return function (req, res, next) { // eslint-disable-line
 
     const successHandler = curry(handleSuccess)(res);
     const errorHandler = curry(handleError)(res);
 
     const { pathname, search } = parseUrl(req.url);
-    const currentRoute = matchRoute(Routes, pathname);
+    const currentRoute = matchRoute(routes, pathname);
 
     if (!hasMatchingRoute(currentRoute)) return next();
 
     const { path, resolve } = currentRoute;
     const routeParams = getParamsFromUrl(path, pathname);
-    const routeMap = getRouteMap(Routes);
+    const routeMap = getRouteMap(routes);
 
     resolveRoute(resolve, routeParams)
       .then((resolvedData) => {
-        const appRoot = serverWrapper(RootComponent, Routes, {
-          location: { pathname, search },
-          resolvedData,
-          routeMap,
-        });
-        const response = parseTemplate(template.toString(), currentRoute, appRoot);
+        const appRoot = serverWrapper(
+          rootComponent,
+          routes,
+          {
+            location: { pathname, search },
+            resolvedData,
+            routeMap,
+          }
+        );
 
+        const response = parseTemplate(template, currentRoute, appRoot);
         successHandler(response);
       }, errorHandler);
   };
