@@ -9,8 +9,7 @@ describe('Wrappers: clientWrapper', () => {
     const appPropsEl = document.getElementById('app-props');
     appPropsEl.innerHTML = JSON.stringify(serverProps);
 
-    const App = props =>
-      (<div>{props.foo}</div>);
+    const App = () => (<div />);
 
     const config = {
       entry: {
