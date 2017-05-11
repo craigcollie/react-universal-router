@@ -1,4 +1,4 @@
 // @flow
-import { clientWrapper } from './universalWrappers';
+import clientWrapper from './wrappers/clientWrapper';
 
 export default clientWrapper;

@@ -1,2 +1,2 @@
-jsdom-global/register
+--require tools/jsdom.js
 --compilers js:babel-register

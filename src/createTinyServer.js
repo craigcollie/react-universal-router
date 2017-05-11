@@ -1,6 +1,6 @@
 import curry from 'lodash/curry';
-
-import { serverWrapper } from './universalWrappers';
+import getString from './lang/getString';
+import serverWrapper from './wrappers/serverWrapper';
 import resolveRoute from './utils/resolveRoute';
 import parseUrl from './utils/parseUrl';
 import matchRoute from './utils/matchRoute';
@@ -14,7 +14,7 @@ const handleSuccess = (res, response) => (
 );
 
 const handleError = (res, error) => (
-  res.status(500).send(error)
+  res.status(500).send(getString('promise.error', error))
 );
 
 function createTinyServer(config) {

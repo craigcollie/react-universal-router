@@ -1,7 +1,7 @@
-import lang from './lang';
+import en from './en';
 
 function getString(string, args) {
-  let actualString = lang[string];
+  let actualString = en[string];
 
   const replaceArg = (str, arg, i) =>
     (str.replace(`{${i}}`, arg));
