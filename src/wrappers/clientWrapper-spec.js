@@ -1,6 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 
+import Route from './../components/Route/Route';
 import clientWrapper from './clientWrapper';
 
 describe('Wrappers: clientWrapper', () => {
@@ -10,13 +11,11 @@ describe('Wrappers: clientWrapper', () => {
     appPropsEl.innerHTML = JSON.stringify(serverProps);
 
     const App = () => (<div />);
+    const Routes = () => (
+      <Route path="/foo" />
+    );
 
-    const config = {
-      entry: {
-        rootComponent: App,
-      },
-    };
-    const rootComponent = clientWrapper(config);
+    const rootComponent = clientWrapper(App, Routes);
     expect(rootComponent.props.foo).to.eql('123');
   });
 });

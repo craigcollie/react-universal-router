@@ -5,11 +5,14 @@ import RouteProvider from './../components/RouteProvider/RouteProvider';
 
 //  Wraps the server-side root component
 //  and passes down serverProps
-const serverWrapper = (RootComponent, routes, props) => {
-  const dataProps = JSON.stringify(props);
+const serverWrapper = (RootComponent, routes, serverProps) => {
+  const dataProps = JSON.stringify(serverProps);
 
-  const wrappedRoot = serverProps => (
-    <RouteProvider {...serverProps} routes={routes}>
+  const wrappedRoot = (
+    <RouteProvider
+      {...serverProps}
+      routes={routes}
+    >
       <RootComponent />
     </RouteProvider>
   );
@@ -18,7 +21,7 @@ const serverWrapper = (RootComponent, routes, props) => {
       <script id='app-props' type='application/json'>
         <![CDATA[${dataProps}]]>
       </script>
-      <div>${renderToString(wrappedRoot(props))}</div>
+      <div>${renderToString(wrappedRoot)}</div>
     `;
 };
 
