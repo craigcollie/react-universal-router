@@ -7,6 +7,7 @@ import RouteProvider from './../components/RouteProvider/RouteProvider';
 //  and passes down serverProps
 const serverWrapper = (RootComponent, routes, props) => {
   const dataProps = JSON.stringify(props);
+
   const wrappedRoot = serverProps => (
     <RouteProvider {...serverProps} routes={routes}>
       <RootComponent />
