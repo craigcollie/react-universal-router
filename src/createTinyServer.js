@@ -1,5 +1,4 @@
 import curry from 'lodash/curry';
-import forEach from 'lodash/forEach';
 
 import serverWrapper from './wrappers/serverWrapper';
 import { prefetchRoute } from './utils/resolveRoute';

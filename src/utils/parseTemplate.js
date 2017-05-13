@@ -19,17 +19,32 @@ function parseTemplateWithTokens(templateString, currentRoute, appRoot) {
 
 function parseTemplate(template, currentRoute, appRoot) {
   return new Promise((resolve, reject) => {
+    //  If our parsing was successful, then resolve
+    //  it back to our promise chain, otherwise we're
+    //  probably missing the appRoot token!
+    const resolveParsedTemplate = (parsedTemplate) => {
+      if (parsedTemplate) {
+        resolve(parsedTemplate);
+      } else {
+        reject(new TinyError('error.parseTemplate.noAppRoot'));
+      }
+    };
+
     const requiresFileLoad = template.match('.html');
     if (!requiresFileLoad) {
       //  We don't need to load a template here, just use
       //  the string provided and try to parse that
-      resolve(parseTemplateWithTokens(template, currentRoute, appRoot));
+      resolveParsedTemplate(
+        parseTemplateWithTokens(template, currentRoute, appRoot),
+      );
     } else {
       //  If we have a .html file, then we need to read the file and
       //  then try to parse the tokens in it
       fs.readFile(template, (err, data) => {
         if (!err) {
-          resolve(parseTemplateWithTokens(data.toString(), currentRoute, appRoot));
+          resolveParsedTemplate(
+            parseTemplateWithTokens(data.toString(), currentRoute, appRoot),
+          );
         }
         reject(new TinyError('error.parseTemplate', template, err));
       });

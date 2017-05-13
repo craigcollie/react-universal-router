@@ -23,7 +23,7 @@ describe('parseTemplate', () => {
       template: '',
       tokens: null,
       appRoot: 'AppRoot',
-      result: null,
+      result: 'error.parseTemplate.noAppRoot',
     },
   ];
 
@@ -35,11 +35,13 @@ describe('parseTemplate', () => {
   }) => {
     it(`should ensure ${template} is ${result}`, (done) => {
       parseTemplate(template, tokens, appRoot)
-        .then(template => {
+        .then((parsedTemplate) => {
           done();
+          expect(parsedTemplate).to.equal(result);
+        }, (errorTemplate) => {
+          done();
+          expect(errorTemplate.message).to.equal(result);
         });
-
-      //expect(parseTemplate(template, tokens, appRoot)).to.equal(result);
     });
   });
 });
