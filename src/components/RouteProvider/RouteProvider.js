@@ -83,12 +83,11 @@ class RoutingProvider extends Component {
   updateRoute(location, resolvedData) {
     const { data } = this.state;
     const { pathname } = location;
-    const { afterRouteChange } = this.props;
 
     this.setState({
       location,
       data: { [pathname]: (resolvedData || data[pathname]) },
-    }, afterRouteChange);
+    });
   }
 
   render() {

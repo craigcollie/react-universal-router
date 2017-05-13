@@ -1,4 +1,6 @@
 // @flow
+import TinyError from './../handlers/TinyError';
+
 type Params = {
   [key: string]: mixed
 };
@@ -9,6 +11,9 @@ function getParamsFromUrl(
   userDefinedRoute: string,
   locationPathname: string,
 ): Params {
+  if (!userDefinedRoute) {
+    throw new TinyError('routes.empty');
+  }
   const locationPathnameParts = locationPathname.split('/');
 
   return userDefinedRoute.split('/').reduce((acc, part, i, arr) => {
