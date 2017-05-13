@@ -1,7 +1,7 @@
 import curry from 'lodash/curry';
 
 import serverWrapper from './wrappers/serverWrapper';
-import resolveRoute from './utils/resolveRoute';
+import { prefetchRoute } from './utils/resolveRoute';
 import parseUrl from './utils/parseUrl';
 import matchRoute from './utils/matchRoute';
 import getParamsFromUrl from './utils/getParamsFromUrl';
@@ -25,27 +25,35 @@ function createTinyServer(config) {
 
     if (!hasMatchingRoute(currentRoute)) return next();
 
+    let routeParams;
+    let routeMap;
     const { path, resolve } = currentRoute;
-    const routeParams = getParamsFromUrl(path, pathname);
-    const routeMap = getRouteMap(routes);
 
-    resolveRoute(resolve, routeParams)
-      .then((resolvedData) => {
-        const appRoot = serverWrapper(
-          rootComponent,
-          routes,
-          {
-            location: { pathname, search },
-            resolvedData,
-            routeMap,
-            ...restConfig, // Append lifecycle methods to props
-          },
-        );
+    try {
+      routeParams = getParamsFromUrl(path, pathname);
+      routeMap = getRouteMap(routes);
+    } catch (error) {
+      errorHandler(error);
+      throw new Error(error.stack);
+    }
 
-        //  Try to parse the template
-        return parseTemplate(template, currentRoute, appRoot);
-      })
-      .then(successHandler)
+    const generateServerWrapper = (resolvedData) => {
+      const appRoot = serverWrapper(rootComponent, routes, {
+        location: { pathname, search },
+        resolvedData,
+        routeMap,
+        ...restConfig,
+      });
+      return parseTemplate(template, currentRoute, appRoot);
+    };
+
+    const promiseChain = () => (
+      prefetchRoute(resolve, routeParams)
+        .then(generateServerWrapper)
+    );
+
+    promiseChain()
+      .then(successHandler, errorHandler)
       .catch(errorHandler);
   };
 }

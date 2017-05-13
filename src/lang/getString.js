@@ -10,7 +10,7 @@ function getString(string, args) {
     args.forEach((arg, i) => {
       actualString = replaceArg(actualString, arg, i);
     });
-  } else {
+  } else if (args) {
     actualString = replaceArg(actualString, args, 0);
   }
 

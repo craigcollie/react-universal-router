@@ -5,22 +5,22 @@ export const handleSuccess = (res, response) => (
 );
 
 export const handleError = (res, error) => {
-  const errorMessage = (typeof error === 'object')
-    ? getString(error.msg, [error.error, error.args])
-    : error;
+  const message = getString(error.message, error.args);
+  const stack = error.stack ? error.stack.toString() : '';
 
-  const message = getString('server.error', errorMessage);
-
-  res.status(500).send(`
-    <html style="background-color:#ff0000">
+  const template = `
+    <html style="background-color:#ff0000; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
     <body>
-        <div style="color: white;">
-            <h1 style="color:#fff">
-                TinyServer error
-            </h1>
-            <h4>${message}</h4>
-        </div>
+      <div style="color: white;">
+        <h1 style="color:#fff">
+          TinyServer error
+        </h1>
+        <h4>${message}</h4>
+        <p>${stack}</p>
+      </div>
     </body>
     </html>
-  `);
+  `;
+
+  res.status(500).send(template);
 };

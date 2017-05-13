@@ -2,11 +2,12 @@ import fs from 'fs';
 import forEach from 'lodash/forEach';
 
 import getTemplateTokens from './getTemplateTokens';
+import TinyError from './../handlers/TinyError';
 
 function parseTemplate(template, currentRoute, appRoot) {
   return new Promise((resolve, reject) => {
     fs.readFile(template, (err, data) => {
-      try {
+      if (!err) {
         let tmp = data.toString();
 
         const tokens = getTemplateTokens(tmp, currentRoute);
@@ -21,10 +22,8 @@ function parseTemplate(template, currentRoute, appRoot) {
         });
         //  Resolved the parsed template
         resolve(tmp);
-      } catch (error) {
-        //  Reject with any caught error
-        reject({ msg: 'error.parseTemplate', error, args: [template] });
       }
+      reject(new TinyError('error.parseTemplate', template, err));
     });
   });
 }
