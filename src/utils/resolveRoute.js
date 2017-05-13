@@ -1,5 +1,7 @@
 import TinyError from './../handlers/TinyError';
 
+//  TODO - ensure production doesn't kill the application
+//  if the prefetching fails
 export function prefetchRoute(resolveFn, routeParams) {
   if (resolveFn) {
     return resolveFn(routeParams)

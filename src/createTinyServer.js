@@ -1,4 +1,5 @@
 import curry from 'lodash/curry';
+import forEach from 'lodash/forEach';
 
 import serverWrapper from './wrappers/serverWrapper';
 import { prefetchRoute } from './utils/resolveRoute';
@@ -10,25 +11,41 @@ import hasMatchingRoute from './utils/hasMatchingRoute';
 import parseTemplate from './utils/parseTemplate';
 
 import { handleSuccess, handleError } from './handlers/handlers';
+import TinyError from './handlers/TinyError';
 
 function createTinyServer(config) {
   const { entry, ...restConfig } = config;
   const { rootComponent, routes, template } = entry;
 
   return function (req, res, next) { // eslint-disable-line
-
+    //  Add response to success and error handling
     const successHandler = curry(handleSuccess)(res);
     const errorHandler = curry(handleError)(res);
+
+    //  Sanity checks to ensure the entry configuration
+    //  has all required properties, otherwise throw a friendly error
+    const requiredEntryItems = ['rootComponent', 'routes', 'template'];
+    requiredEntryItems.forEach((item) => {
+      if (!entry[item]) {
+        const error = new TinyError('api.error', item);
+        errorHandler(error);
+        throw new Error(error.stack);
+      }
+    });
 
     const { pathname, search } = parseUrl(req.url);
     const currentRoute = matchRoute(routes, pathname);
 
+    //  If the current route fails to match
+    //  then hand off the request to the next middleware
     if (!hasMatchingRoute(currentRoute)) return next();
 
     let routeParams;
     let routeMap;
     const { path, resolve } = currentRoute;
 
+    //  Try to get the routeParams and routeMap
+    //  from the supplied routes
     try {
       routeParams = getParamsFromUrl(path, pathname);
       routeMap = getRouteMap(routes);
@@ -37,22 +54,22 @@ function createTinyServer(config) {
       throw new Error(error.stack);
     }
 
-    const generateServerWrapper = (resolvedData) => {
-      const appRoot = serverWrapper(rootComponent, routes, {
+    const generateServerWrapper = resolvedData => (
+      serverWrapper(rootComponent, routes, {
         location: { pathname, search },
         resolvedData,
         routeMap,
         ...restConfig,
-      });
-      return parseTemplate(template, currentRoute, appRoot);
-    };
-
-    const promiseChain = () => (
-      prefetchRoute(resolve, routeParams)
-        .then(generateServerWrapper)
+      })
     );
 
-    promiseChain()
+    const getParsedTemplate = appRoot => (
+      parseTemplate(template, currentRoute, appRoot)
+    );
+
+    prefetchRoute(resolve, routeParams)
+      .then(generateServerWrapper)
+      .then(getParsedTemplate)
       .then(successHandler, errorHandler)
       .catch(errorHandler);
   };
