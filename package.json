@@ -1,6 +1,6 @@
 {
   "name": "tiny-universal",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "A universal router for isomorphic React applications",
   "main": "dist/tiny-universal.min.js",
   "module": "src/index",
