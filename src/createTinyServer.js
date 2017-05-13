@@ -1,5 +1,5 @@
 import curry from 'lodash/curry';
-import getString from './lang/getString';
+
 import serverWrapper from './wrappers/serverWrapper';
 import resolveRoute from './utils/resolveRoute';
 import parseUrl from './utils/parseUrl';
@@ -9,13 +9,7 @@ import getRouteMap from './utils/getRouteMap';
 import hasMatchingRoute from './utils/hasMatchingRoute';
 import parseTemplate from './utils/parseTemplate';
 
-const handleSuccess = (res, response) => (
-  res.send(response)
-);
-
-const handleError = (res, error) => (
-  res.status(500).send(getString('promise.error', error))
-);
+import { handleSuccess, handleError } from './handlers/handlers';
 
 function createTinyServer(config) {
   const { entry, ...restConfig } = config;
@@ -49,9 +43,10 @@ function createTinyServer(config) {
         );
 
         //  Try to parse the template
-        parseTemplate(template, currentRoute, appRoot)
-          .then(successHandler);
-      }, errorHandler);
+        return parseTemplate(template, currentRoute, appRoot);
+      })
+      .then(successHandler)
+      .catch(errorHandler);
   };
 }
 

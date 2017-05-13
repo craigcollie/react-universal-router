@@ -6,22 +6,25 @@ import getTemplateTokens from './getTemplateTokens';
 function parseTemplate(template, currentRoute, appRoot) {
   return new Promise((resolve, reject) => {
     fs.readFile(template, (err, data) => {
-      if (err) {
-        reject('Failed to execute template parsing');
+      try {
+        let tmp = data.toString();
+
+        const tokens = getTemplateTokens(tmp, currentRoute);
+
+        if (!tmp.match('<% appRoot %>')) return null;
+
+        //  Replace the main appRoot token!
+        tmp = tmp.replace('<% appRoot %>', appRoot);
+
+        forEach(tokens, (val, key) => {
+          tmp = tmp.replace(`<% ${key} %>`, val);
+        });
+        //  Resolved the parsed template
+        resolve(tmp);
+      } catch (error) {
+        //  Reject with any caught error
+        reject({ msg: 'error.parseTemplate', error, args: [template] });
       }
-      let tmp = data.toString();
-
-      const tokens = getTemplateTokens(tmp, currentRoute);
-
-      if (!tmp.match('<% appRoot %>')) return null;
-
-      //  Replace the main appRoot token!
-      tmp = tmp.replace('<% appRoot %>', appRoot);
-
-      forEach(tokens, (val, key) => {
-        tmp = tmp.replace(`<% ${key} %>`, val);
-      });
-      resolve(tmp);
     });
   });
 }
