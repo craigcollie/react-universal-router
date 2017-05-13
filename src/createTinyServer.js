@@ -48,8 +48,9 @@ function createTinyServer(config) {
           },
         );
 
-        const response = parseTemplate(template, currentRoute, appRoot);
-        successHandler(response);
+        //  Try to parse the template
+        parseTemplate(template, currentRoute, appRoot)
+          .then(successHandler);
       }, errorHandler);
   };
 }
