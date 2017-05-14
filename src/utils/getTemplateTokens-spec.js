@@ -5,15 +5,15 @@ import getTemplateTokens from './getTemplateTokens';
 describe('Utils: getTemplateTokens', () => {
   const tests = [
     {
-      template: '<% appRoot %><% foo %><% meta.title %>',
+      template: '{appRoot}{foo}{meta.title}',
       route: { foo: '123', meta: { title: 'blah' } },
       result: { foo: '123', 'meta.title': 'blah' },
     }, {
-      template: '<% appRoot %>',
+      template: '{appRoot}',
       route: { foo: '123', meta: { title: 'blah' } },
       result: {},
     }, {
-      template: '<% foo.blah.wee %>',
+      template: '{foo.blah.wee}',
       route: { foo: { blah: { wee: 'woo!' } } },
       result: { 'foo.blah.wee': 'woo!' },
     },

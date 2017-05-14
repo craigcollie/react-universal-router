@@ -8,11 +8,11 @@ function parseTemplateWithTokens(templateString, currentRoute, appRoot) {
   let tmp = templateString;
   const tokens = getTemplateTokens(tmp, currentRoute);
 
-  if (!tmp.match('<% appRoot %>')) return null;
-  tmp = tmp.replace('<% appRoot %>', appRoot);
+  if (!tmp.match('{appRoot}')) return null;
+  tmp = tmp.replace('{appRoot}', appRoot);
 
   forEach(tokens, (val, key) => {
-    tmp = tmp.replace(`<% ${key} %>`, val);
+    tmp = tmp.replace(`{${key}}`, val);
   });
   return tmp;
 }
