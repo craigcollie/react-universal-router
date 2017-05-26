@@ -1,42 +1,44 @@
-// @flow
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 
 import matchRoute from './../../utils/matchRoute';
 import getParamsFromUrl from './../../utils/getParamsFromUrl';
 
-type Props = null;
-type Context = {
-  getLocation: Function,
-  getRoutes: Function,
-  getResolvedData: Function,
-};
+class Router extends Component {
+  constructor() {
+    super();
 
-const Router = (props: Props, context: Context) => {
-  const {
-    getLocation,
-    getRoutes,
-    getResolvedData,
-  } = context;
+    this.state = {
+      activeRoute: null,
+    };
+  }
 
-  //  Get location from <RouteProvider />
-  const location = getLocation();
+  render() {
+    const {
+      getLocation,
+      getRoutes,
+      getResolvedData,
+    } = this.context;
 
-  //  Get data from <RouteProvider />
-  const resolvedData = getResolvedData(location.pathname);
+    //  Get location from <RouteProvider />
+    const location = getLocation();
 
-  //  Routes can be pattern matched
-  //  So a /path/:id can be used
-  const { path, component: ComponentView } = matchRoute(getRoutes(), location.pathname);
-  const routeParams = getParamsFromUrl(path, location.pathname);
+    //  Get data from <RouteProvider />
+    const resolvedData = getResolvedData(location.pathname);
 
-  return (
-    <ComponentView
-      location={location}
-      resolvedData={resolvedData}
-      routeParams={routeParams}
-    />
-  );
-};
+    //  Routes can be pattern matched
+    //  So a /path/:id can be used
+    const { path, component: ComponentView } = matchRoute(getRoutes(), location.pathname);
+    const routeParams = getParamsFromUrl(path, location.pathname);
+
+    return (
+      <ComponentView
+        activeRoute={location.pathname}
+        resolvedData={resolvedData}
+        routeParams={routeParams}
+      />
+    );
+  }
+}
 
 Router.contextTypes = {
   getLocation: PropTypes.func,
